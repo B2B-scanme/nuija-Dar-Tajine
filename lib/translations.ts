@@ -1,0 +1,160 @@
+﻿export type Language = 'en' | 'fr' | 'ar';
+
+export interface TranslationType {
+  // Brand
+  restaurantName: string;
+  subtitle: string;
+  // Info
+  openLabel: string;
+  openDays: string;
+  hoursLabel: string;
+  hours: string;
+  addressLabel: string;
+  address: string;
+  // Landing buttons
+  viewMenuBtn: string;
+  orderWhatsAppBtn: string;
+  aboutBtn: string;
+  whatsAppMessage: string;
+  // Category labels
+  allCategory: string;
+  coldStarterCategory: string;
+  saladMenuCategory: string;
+  tajineCategory: string;
+  traditionalCategory: string;
+  grilleCategory: string;
+  sandwichesCategory: string;
+  drinksCategory: string;
+  // Menu UI
+  menuTitle: string;
+  menuDescription: string;
+  backBtn: string;
+  searchPlaceholder: string;
+  // Cart UI
+  yourOrder: string;
+  total: string;
+  addToCart: string;
+  orderViaWhatsApp: string;
+  priceOnRequest: string;
+  // About modal
+  closeBtn: string;
+  aboutTitle: string;
+  aboutSubtitle: string;
+  aboutText: string;
+  aboutFooter: string;
+}
+
+export const translations: Record<Language, TranslationType> = {
+  en: {
+    restaurantName: 'Nuija Dar Tajine',
+    subtitle: 'Authentic Moroccan Cuisine in Kénitra',
+    openLabel: 'Open',
+    openDays: '7 days a week',
+    hoursLabel: 'Hours',
+    hours: '12:30 - 23:00',
+    addressLabel: 'Location',
+    address: 'Bd C, Kénitra',
+    viewMenuBtn: 'View Menu',
+    orderWhatsAppBtn: 'Order via WhatsApp',
+    aboutBtn: 'About Us',
+    whatsAppMessage: 'Hello! I would like to place an order.',
+    allCategory: 'All',
+    coldStarterCategory: 'Cold Starters',
+    saladMenuCategory: 'Salads',
+    tajineCategory: 'Tajine',
+    traditionalCategory: 'Traditional',
+    grilleCategory: 'Charcoal Grilled',
+    sandwichesCategory: 'Sandwiches',
+    drinksCategory: 'Drinks',
+    menuTitle: 'Our Menu',
+    menuDescription: 'Discover our authentic Moroccan dishes',
+    backBtn: 'Back to Restaurant',
+    searchPlaceholder: 'Search…',
+    yourOrder: 'Your Order',
+    total: 'Total',
+    addToCart: 'Add to Cart',
+    orderViaWhatsApp: 'Order via WhatsApp',
+    priceOnRequest: 'Price on request',
+    closeBtn: 'Close',
+    aboutTitle: 'About',
+    aboutSubtitle: 'Nuija Dar Tajine',
+    aboutText: 'Nuija Dar Tajine is a Moroccan restaurant and patisserie open since 2022, located between the city centre of Kénitra (3 km) and Mahdia Beach (4 km). We invite you to come and enjoy Moroccan cuisine rich in flavours, with a variety of salads, tajines, couscous and wood-fired grills, while sipping a mint tea in a warm and typically Moroccan setting.',
+    aboutFooter: 'Kénitra, Morocco',
+  },
+  fr: {
+    restaurantName: 'Nuija Dar Tajine',
+    subtitle: 'Cuisine marocaine authentique à Kénitra',
+    openLabel: 'Ouvert',
+    openDays: '7j/7',
+    hoursLabel: 'Horaires',
+    hours: '12h30 - 23h00',
+    addressLabel: 'Localisation',
+    address: 'Bd C, Kénitra',
+    viewMenuBtn: 'Voir le Menu',
+    orderWhatsAppBtn: 'Commander sur WhatsApp',
+    aboutBtn: 'Qui sommes-nous ?',
+    whatsAppMessage: 'Bonjour ! Je voudrais passer une commande.',
+    allCategory: 'Tout',
+    coldStarterCategory: 'Entrées Froides',
+    saladMenuCategory: 'Salades',
+    tajineCategory: 'Tajine',
+    traditionalCategory: 'Traditionnel',
+    grilleCategory: 'Grillé au Charbon',
+    sandwichesCategory: 'Sandwiches',
+    drinksCategory: 'Boissons',
+    menuTitle: 'Notre Menu',
+    menuDescription: 'Découvrez nos plats marocains authentiques',
+    backBtn: 'Retour au Restaurant',
+    searchPlaceholder: 'Rechercher…',
+    yourOrder: 'Votre Commande',
+    total: 'Total',
+    addToCart: 'Ajouter au Panier',
+    orderViaWhatsApp: 'Commander sur WhatsApp',
+    priceOnRequest: 'Prix sur demande',
+    closeBtn: 'Fermer',
+    aboutTitle: 'À propos',
+    aboutSubtitle: 'Nuija Dar Tajine',
+    aboutText: "Nuija Dar Tajine est un restau/Patisserie Marocain ouvert depuis 2022, situé entre Le centre ville de Kénitra (3Km) et Mahdia Plage (4km). Nous vous invitons à venir déguster une cuisine Marocaine, riche en saveurs, avec des variétés de salades, Tajines, Couscous et Grillades au feu de bois, tout en sirotant un thé à la menthe dans un cadre typique et une ambiance conviviale.",
+    aboutFooter: 'Kénitra, Maroc',
+  },
+  ar: {
+    restaurantName: 'نويجة دار تاجين',
+    subtitle: 'المطبخ المغربي الأصيل بقنيطرة',
+    openLabel: 'مفتوح',
+    openDays: '7 أيام بالأسبوع',
+    hoursLabel: 'الساعات',
+    hours: '12:30 - 23:00',
+    addressLabel: 'الموقع',
+    address: 'البلفيدير، قنيطرة',
+    viewMenuBtn: 'عرض القائمة',
+    orderWhatsAppBtn: 'اطلب عبر واتس آب',
+    aboutBtn: 'من نحن؟',
+    whatsAppMessage: 'مرحباً! أود تقديم طلب.',
+    allCategory: 'الكل',
+    coldStarterCategory: 'مقبلات باردة',
+    saladMenuCategory: 'السلطات',
+    tajineCategory: 'طاجين',
+    traditionalCategory: 'تقليدي',
+    grilleCategory: 'مشوي على الفحم',
+    sandwichesCategory: 'سندويشات',
+    drinksCategory: 'المشروبات',
+    menuTitle: 'قائمتنا',
+    menuDescription: 'اكتشف أطباقنا المغربية الأصيلة',
+    backBtn: 'العودة إلى المطعم',
+    searchPlaceholder: 'بحث…',
+    yourOrder: 'طلبك',
+    total: 'المجموع',
+    addToCart: 'أضف إلى السلة',
+    orderViaWhatsApp: 'اطلب عبر واتس آب',
+    priceOnRequest: 'السعر عند الطلب',
+    closeBtn: 'إغلاق',
+    aboutTitle: 'عن المطعم',
+    aboutSubtitle: 'نويجة دار تاجين',
+    aboutText: 'نويجة دار تاجين مطعم وحلواني مغربي مفتوح منذ 2022، يقع بين وسط مدينة قنيطرة (3 كم) وشاطئ مهدية (4 كم). ندعوكم للتفضل بتذوق المطبخ المغربي الغني بنكهاته، مع تشكيلة من السلطات والطواجن والكسكس والمشويات على الفحم، مع كأس أتاي في إطار أصيل وأجواء مرحبة.',
+    aboutFooter: 'قنيطرة، المغرب',
+  },
+};
+
+export const getTranslations = (language: Language): TranslationType => {
+  return translations[language] || translations.en;
+};

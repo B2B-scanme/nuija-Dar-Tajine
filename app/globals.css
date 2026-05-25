@@ -1,0 +1,334 @@
+@import url('https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Cinzel:wght@400;500;600;700&display=swap');
+
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Luxury restaurant theme - Dark with gold accents */
+  --background: #000000;
+  --foreground: #f5ead3;
+  --card: #0a0a0a;
+  --card-foreground: #f5ead3;
+  --popover: #0a0a0a;
+  --popover-foreground: #f5ead3;
+  --primary: #d4af37;
+  --primary-foreground: #000000;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #f5ead3;
+  --muted: #333333;
+  --muted-foreground: #999999;
+  --accent: #d4af37;
+  --accent-foreground: #000000;
+  --destructive: #dc2626;
+  --destructive-foreground: #f5ead3;
+  --border: #d4af37;
+  --input: #1a1a1a;
+  --ring: #d4af37;
+  --chart-1: #d4af37;
+  --chart-2: #8b7355;
+  --chart-3: #4a4a4a;
+  --chart-4: #666666;
+  --chart-5: #999999;
+  --radius: 0.5rem;
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: #f5ead3;
+  --sidebar-primary: #d4af37;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #d4af37;
+  --sidebar-accent-foreground: #000000;
+  --sidebar-border: #d4af37;
+  --sidebar-ring: #d4af37;
+}
+
+.dark {
+  --background: #000000;
+  --foreground: #f5ead3;
+  --card: #0a0a0a;
+  --card-foreground: #f5ead3;
+  --popover: #0a0a0a;
+  --popover-foreground: #f5ead3;
+  --primary: #d4af37;
+  --primary-foreground: #000000;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #f5ead3;
+  --muted: #333333;
+  --muted-foreground: #999999;
+  --accent: #d4af37;
+  --accent-foreground: #000000;
+  --destructive: #dc2626;
+  --destructive-foreground: #f5ead3;
+  --border: #d4af37;
+  --input: #1a1a1a;
+  --ring: #d4af37;
+  --chart-1: #d4af37;
+  --chart-2: #8b7355;
+  --chart-3: #4a4a4a;
+  --chart-4: #666666;
+  --chart-5: #999999;
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: #f5ead3;
+  --sidebar-primary: #d4af37;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #d4af37;
+  --sidebar-accent-foreground: #000000;
+  --sidebar-border: #d4af37;
+  --sidebar-ring: #d4af37;
+}
+
+@theme inline {
+  --font-heading: 'Allura', cursive;
+  --font-display: 'Cinzel', serif;
+  --font-serif: 'Cormorant Garamond', serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-serif);
+    -webkit-text-size-adjust: 100%;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+@layer components {
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+      opacity: 0.6;
+    }
+    50% {
+      transform: translateY(-20px) rotate(2deg);
+      opacity: 0.75;
+    }
+  }
+
+  @keyframes float-delay {
+    0%, 100% {
+      transform: translateY(0px) rotate(1deg);
+      opacity: 0.6;
+    }
+    50% {
+      transform: translateY(-15px) rotate(-1deg);
+      opacity: 0.75;
+    }
+  }
+
+  @keyframes float-delay-2 {
+    0%, 100% {
+      transform: translateY(0px) rotate(-2deg);
+      opacity: 0.6;
+    }
+    50% {
+      transform: translateY(-25px) rotate(1deg);
+      opacity: 0.75;
+    }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-float-delay {
+    animation: float-delay 7s ease-in-out infinite;
+  }
+
+  .animate-float-delay-2 {
+    animation: float-delay-2 8s ease-in-out infinite;
+  }
+
+}
+
+/* ─────────────────────────────────────────────
+   Luxury Calligraphy Typography System
+   Great Vibes  ·  Cormorant Garamond  ·  Cinzel
+   Placed in @layer utilities so these always
+   beat Tailwind font-* utility classes.
+───────────────────────────────────────────── */
+@layer utilities {
+
+  /* Animated gold foil shimmer — travels left across the text */
+  @keyframes gold-shimmer {
+    0%   { background-position: 200% center; }
+    100% { background-position: -200% center; }
+  }
+
+  /* Soft cinematic entrance — blur dissolve + glow bloom */
+  @keyframes title-reveal {
+    0% {
+      opacity: 0;
+      filter: blur(10px) drop-shadow(0 0 0px rgba(212,175,55,0));
+      letter-spacing: 0.06em;
+    }
+    60% {
+      opacity: 0.85;
+      filter: blur(1px) drop-shadow(0 0 18px rgba(212,175,55,0.35));
+    }
+    100% {
+      opacity: 1;
+      filter: blur(0) drop-shadow(0 0 26px rgba(212,175,55,0.42)) drop-shadow(0 4px 16px rgba(0,0,0,0.9));
+    }
+  }
+
+  /* Delicate underline draw-in for section headings */
+  @keyframes line-draw {
+    from { transform: scaleX(0); opacity: 0; }
+    to   { transform: scaleX(1); opacity: 1; }
+  }
+
+  /* ──────────────────────────────────────────
+     .title-luxury
+     Great Vibes calligraphy · animated shimmer
+     For: restaurant name h1, menu title h1,
+          about modal h2
+  ────────────────────────────────────────── */
+  .title-luxury {
+    font-family: 'Allura', cursive;
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: 0.015em;
+    background: linear-gradient(
+      90deg,
+      #6b4c10 0%,
+      #b8860b 8%,
+      #d4af37 18%,
+      #f0d060 30%,
+      #fff8dc 42%,
+      #f5e070 52%,
+      #d4af37 62%,
+      #c8a820 72%,
+      #e8c840 82%,
+      #d4af37 90%,
+      #6b4c10 100%
+    );
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation:
+      gold-shimmer 8s linear infinite,
+      title-reveal 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+    filter:
+      drop-shadow(0 0 30px rgba(212,175,55,0.42))
+      drop-shadow(0 0  8px rgba(212,175,55,0.22))
+      drop-shadow(0 5px 18px rgba(0,0,0,0.92));
+  }
+
+  /* ──────────────────────────────────────────
+     .title-section
+     Cormorant Garamond italic · static gradient
+     For: all category h2, sub-page headers
+  ────────────────────────────────────────── */
+  .title-section {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: 0.055em;
+    background: linear-gradient(
+      135deg,
+      #9a7010 0%,
+      #c8a820 22%,
+      #e8c840 40%,
+      #f5e882 52%,
+      #e8c840 64%,
+      #d4af37 78%,
+      #9a7010 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter:
+      drop-shadow(0 0 9px rgba(212,175,55,0.3))
+      drop-shadow(0 2px 8px rgba(0,0,0,0.85));
+    text-transform: none;
+  }
+
+  /* Animated underline for .title-section (applied to the border-b sibling) */
+  .title-section + *,
+  .title-section-wrap::after {
+    transform-origin: left;
+    animation: line-draw 0.6s 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* ──────────────────────────────────────────
+     .title-card
+     Cinzel caps · warm cream-gold
+     For: cart modal h3, functional headings
+  ────────────────────────────────────────── */
+  /* ──────────────────────────────────────────
+     .price-tag
+     Clean system sans-serif · tabular numerals
+     For: all price displays across the app
+  ────────────────────────────────────────── */
+  .price-tag {
+    font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+  }
+
+  .title-card {
+    font-family: 'Cinzel', serif;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: linear-gradient(
+      135deg,
+      #c4941a 0%,
+      #d4af37 30%,
+      #f0e070 52%,
+      #d4af37 72%,
+      #c4941a 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter:
+      drop-shadow(0 0 6px rgba(212,175,55,0.28))
+      drop-shadow(0 1px 5px rgba(0,0,0,0.75));
+  }
+}

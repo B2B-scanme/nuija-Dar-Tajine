@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Rename-Item \"d:\\\\ScanMe\\\\Nuija-Dar-Tajine\\\\first-version\\\\.next\\\\dev\\\\cache\\\\turbopack\\\\2275bd85\" \"2275bd85_del\" -ErrorAction SilentlyContinue)",
+      "PowerShell(cmd /c \"rd /s /q `\"d:\\\\ScanMe\\\\Nuija-Dar-Tajine\\\\first-version\\\\.next\\\\dev\\\\cache\\\\turbopack\\\\2275bd85_del`\"\" 2>&1)"
+    ]
+  }
+}
