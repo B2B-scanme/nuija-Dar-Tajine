@@ -18,16 +18,8 @@ interface CartItem extends MenuItem {
 
 type Category = 'all' | 'coldStarter' | 'saladMenu' | 'tajine' | 'traditional' | 'grille' | 'sandwiches' | 'drinks';
 
-const SUBCATEGORY_CONFIG: Partial<Record<Category, Array<{ key: string; label: string }>>> = {
-  tajine: [
-    { key: 'all',        label: 'All Tajines' },
-    { key: 'kefta',      label: 'Kefta (Viande Hachée)' },
-    { key: 'beef',       label: 'Beef (Boeuf)' },
-    { key: 'chicken',    label: 'Chicken (Poulet)' },
-    { key: 'lamb',       label: 'Lamb (Agneau)' },
-    { key: 'fish',       label: 'Fish (Poisson)' },
-    { key: 'vegetarian', label: 'Vegetarian' },
-  ],
+const SUBCATEGORY_KEYS: Partial<Record<Category, string[]>> = {
+  tajine: ['all', 'kefta', 'beef', 'chicken', 'lamb', 'fish', 'vegetarian'],
 };
 
 interface MenuSectionProps {
@@ -46,6 +38,19 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
   const [itemQty, setItemQty] = useState(1);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [showCart, setShowCart] = useState(false);
+
+  const getSubLabel = (key: string): string => {
+    const map: Record<string, string> = {
+      all:        translations.tajineSubAll,
+      kefta:      translations.tajineSubKefta,
+      beef:       translations.tajineSubBeef,
+      chicken:    translations.tajineSubChicken,
+      lamb:       translations.tajineSubLamb,
+      fish:       translations.tajineSubFish,
+      vegetarian: translations.tajineSubVegetarian,
+    };
+    return map[key] ?? key;
+  };
 
   const getNumericPrice = (price?: string) => {
     if (!price) return 0;
@@ -138,12 +143,10 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
 
   const availableSubcategories = useMemo(() => {
     if (selectedCategory === 'all') return [];
-    const config = SUBCATEGORY_CONFIG[selectedCategory];
-    if (!config) return [];
+    const keys = SUBCATEGORY_KEYS[selectedCategory];
+    if (!keys) return [];
     const items = menuItems[selectedCategory] || [];
-    return config.filter(sub =>
-      sub.key === 'all' || items.some(item => item.subcategory === sub.key)
-    );
+    return keys.filter(k => k === 'all' || items.some(item => item.subcategory === k));
   }, [selectedCategory]);
 
   const filteredItems = useMemo(() => {
@@ -207,7 +210,7 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
   const handleWhatsAppOrder = () => {
     if (cart.length === 0) return;
     const lines = cart.map(i => `${i.quantity}x ${i.name} - ${i.price ?? translations.priceOnRequest}`).join('\n');
-    const message = encodeURIComponent(`Hello! I would like to order:\n\n${lines}\n\nTotal: ${cartTotal.toFixed(2)} MAD`);
+    const message = encodeURIComponent(`${translations.whatsAppOrderIntro}\n\n${lines}\n\n${translations.whatsAppOrderTotal}: ${cartTotal.toFixed(2)} MAD`);
     window.open(`https://wa.me/212607595907?text=${message}`, '_blank');
   };
 
@@ -244,9 +247,9 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
   const renderSection = (key: string, label: string) => {
     const items = (filteredItems as Record<string, MenuItem[]>)[key];
     if (!items || items.length === 0) return null;
-    const config = SUBCATEGORY_CONFIG[key as Category];
-    const sectionSubcats = config
-      ? config.filter(sub => sub.key === 'all' || menuItems[key].some(item => item.subcategory === sub.key))
+    const subKeys = SUBCATEGORY_KEYS[key as Category];
+    const sectionSubcats = subKeys
+      ? subKeys.filter(k => k === 'all' || menuItems[key].some(item => item.subcategory === k))
       : [];
     return (
       <div className="mb-12" key={key}>
@@ -255,17 +258,17 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
         {sectionSubcats.length > 1 && (
           <div className="animate-subcategory-slide-down mb-6 -mx-4 px-4">
             <div ref={subcategoryScrollRef} className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-              {sectionSubcats.map(sub => (
+              {sectionSubcats.map(subKey => (
                 <button
-                  key={sub.key}
-                  onClick={() => { setSelectedCategory(key as Category); setSelectedSubcategory(sub.key); }}
+                  key={subKey}
+                  onClick={() => { setSelectedCategory(key as Category); setSelectedSubcategory(subKey); }}
                   className={`px-3 py-1.5 rounded-sm text-xs font-semibold uppercase tracking-wider transition-all whitespace-nowrap flex-shrink-0 ${
-                    selectedCategory === key && selectedSubcategory === sub.key
+                    selectedCategory === key && selectedSubcategory === subKey
                       ? 'bg-primary text-black border border-primary shadow-md shadow-primary/30'
                       : 'border border-primary/60 text-primary/80 hover:border-primary hover:text-primary hover:bg-primary/10'
                   }`}
                 >
-                  {sub.label}
+                  {getSubLabel(subKey)}
                 </button>
               ))}
             </div>
@@ -352,7 +355,7 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
         {/* No results */}
         {Object.values(filteredItems).every(items => !items || items.length === 0) && (
           <div className="text-center py-12">
-            <p className="text-foreground/70 text-lg">No items found.</p>
+            <p className="text-foreground/70 text-lg">{translations.noItemsFound}</p>
           </div>
         )}
         </div>{/* end animate-menu-fade-in */}
@@ -615,7 +618,7 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
-            <span>{cartCount} item{cartCount > 1 ? 's' : ''}</span>
+            <span>{cartCount} {translations.cartItemsLabel}</span>
             <span className="opacity-50">·</span>
             <span className="price-tag">{cartTotal.toFixed(2)} MAD</span>
           </button>

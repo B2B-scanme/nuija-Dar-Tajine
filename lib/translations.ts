@@ -42,6 +42,19 @@ export interface TranslationType {
   aboutSubtitle: string;
   aboutText: string;
   aboutFooter: string;
+  // Tajine subcategories
+  tajineSubAll: string;
+  tajineSubKefta: string;
+  tajineSubBeef: string;
+  tajineSubChicken: string;
+  tajineSubLamb: string;
+  tajineSubFish: string;
+  tajineSubVegetarian: string;
+  // Extra UI
+  noItemsFound: string;
+  cartItemsLabel: string;
+  whatsAppOrderIntro: string;
+  whatsAppOrderTotal: string;
 }
 
 export const translations: Record<Language, TranslationType> = {
@@ -80,6 +93,17 @@ export const translations: Record<Language, TranslationType> = {
     aboutSubtitle: 'Nuija Dar Tajine',
     aboutText: 'Nuija Dar Tajine is a Moroccan restaurant and patisserie open since 2022, located between the city centre of Kénitra (3 km) and Mahdia Beach (4 km). We invite you to come and enjoy Moroccan cuisine rich in flavours, with a variety of salads, tajines, couscous and wood-fired grills, while sipping a mint tea in a warm and typically Moroccan setting.',
     aboutFooter: 'Kénitra, Morocco',
+    tajineSubAll: 'All Tajines',
+    tajineSubKefta: 'Kefta (Ground Meat)',
+    tajineSubBeef: 'Beef',
+    tajineSubChicken: 'Chicken',
+    tajineSubLamb: 'Lamb',
+    tajineSubFish: 'Fish',
+    tajineSubVegetarian: 'Vegetarian',
+    noItemsFound: 'No items found.',
+    cartItemsLabel: 'items',
+    whatsAppOrderIntro: 'Hello! I would like to order:',
+    whatsAppOrderTotal: 'Total',
   },
   fr: {
     restaurantName: 'Nuija Dar Tajine',
@@ -116,6 +140,17 @@ export const translations: Record<Language, TranslationType> = {
     aboutSubtitle: 'Nuija Dar Tajine',
     aboutText: "Nuija Dar Tajine est un restau/Patisserie Marocain ouvert depuis 2022, situé entre Le centre ville de Kénitra (3Km) et Mahdia Plage (4km). Nous vous invitons à venir déguster une cuisine Marocaine, riche en saveurs, avec des variétés de salades, Tajines, Couscous et Grillades au feu de bois, tout en sirotant un thé à la menthe dans un cadre typique et une ambiance conviviale.",
     aboutFooter: 'Kénitra, Maroc',
+    tajineSubAll: 'Tous les Tajines',
+    tajineSubKefta: 'Kefta (Viande Hachée)',
+    tajineSubBeef: 'Boeuf',
+    tajineSubChicken: 'Poulet',
+    tajineSubLamb: 'Agneau',
+    tajineSubFish: 'Poisson',
+    tajineSubVegetarian: 'Végétarien',
+    noItemsFound: 'Aucun article trouvé.',
+    cartItemsLabel: 'articles',
+    whatsAppOrderIntro: 'Bonjour ! Je voudrais commander :',
+    whatsAppOrderTotal: 'Total',
   },
   ar: {
     restaurantName: 'نويجة دار تاجين',
@@ -152,6 +187,17 @@ export const translations: Record<Language, TranslationType> = {
     aboutSubtitle: 'نويجة دار تاجين',
     aboutText: 'نويجة دار تاجين مطعم وحلواني مغربي مفتوح منذ 2022، يقع بين وسط مدينة قنيطرة (3 كم) وشاطئ مهدية (4 كم). ندعوكم للتفضل بتذوق المطبخ المغربي الغني بنكهاته، مع تشكيلة من السلطات والطواجن والكسكس والمشويات على الفحم، مع كأس أتاي في إطار أصيل وأجواء مرحبة.',
     aboutFooter: 'قنيطرة، المغرب',
+    tajineSubAll: 'كل الطواجن',
+    tajineSubKefta: 'كفتة (لحم مفروم)',
+    tajineSubBeef: 'لحم البقر',
+    tajineSubChicken: 'دجاج',
+    tajineSubLamb: 'لحم الغنم',
+    tajineSubFish: 'سمك',
+    tajineSubVegetarian: 'نباتي',
+    noItemsFound: 'لا توجد عناصر.',
+    cartItemsLabel: 'عناصر',
+    whatsAppOrderIntro: 'مرحباً! أود الطلب:',
+    whatsAppOrderTotal: 'المجموع',
   },
 };
 
