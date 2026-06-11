@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { TranslationType } from '@/lib/translations';
 
@@ -9,6 +9,7 @@ interface MenuItem {
   price?: string;
   description?: string;
   image: string;
+  subcategory?: string;
 }
 
 interface CartItem extends MenuItem {
@@ -16,6 +17,18 @@ interface CartItem extends MenuItem {
 }
 
 type Category = 'all' | 'coldStarter' | 'saladMenu' | 'tajine' | 'traditional' | 'grille' | 'sandwiches' | 'drinks';
+
+const SUBCATEGORY_CONFIG: Partial<Record<Category, Array<{ key: string; label: string }>>> = {
+  tajine: [
+    { key: 'all',        label: 'All Tajines' },
+    { key: 'kefta',      label: 'Kefta (Viande Hachée)' },
+    { key: 'beef',       label: 'Beef (Boeuf)' },
+    { key: 'chicken',    label: 'Chicken (Poulet)' },
+    { key: 'lamb',       label: 'Lamb (Agneau)' },
+    { key: 'fish',       label: 'Fish (Poisson)' },
+    { key: 'vegetarian', label: 'Vegetarian' },
+  ],
+};
 
 interface MenuSectionProps {
   translations: TranslationType;
@@ -27,6 +40,7 @@ interface MenuSectionProps {
 export function MenuSection({ translations, visible, onBackClick, isArabic }: MenuSectionProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<Category>('all');
+  const [selectedSubcategory, setSelectedSubcategory] = useState('all');
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [selectedItemCategory, setSelectedItemCategory] = useState('');
   const [itemQty, setItemQty] = useState(1);
@@ -53,13 +67,13 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
       { name: 'Salade Marocaine', price: '22,50 MAD', description: 'Tomates, oignon, poivron vert, olives, slices, sauces', image: '/Salade-Marocaine.jpeg' },
     ],
     tajine: [
-      { name: 'Tajine Kefta au Oeufs', price: '62,10 MAD', description: 'Tajine Kefta aux oeufs et sauce Tomate', image: '/tajine-kefta-au-oeuf.jpeg' },
-      { name: 'Tajine Poulet Au Daghmira Avec Frites', price: '69,00 MAD', description: 'Tajine Poulet (Cuisse et haut de poulet) au Daghmira et Frites', image: '/tajine-featured.jpg' },
-      { name: 'Tajine De Veau Aux Daghmira Avec Frites', price: '67,50 MAD', description: 'Tajine boeuf à la sauce daghmira frites', image: '/tajine-featured.jpg' },
-      { name: 'Tajine Viande Hachée Kherdoula', price: '62,10 MAD', description: 'Tajine Viande Hachée Kherdoula', image: '/Tajine-Viande-Hachée-Kherdoula.jpeg' },
-      { name: 'Tajine De Viande Aux Pruneaux', price: '75,00 MAD', description: 'Tajine de viande de veau aux pruneaux, amandes oeuf et Oignons caramélisés', image: '/tajine-featured.jpg' },
-      { name: 'Tajine Lbacha', price: '149,00 MAD', description: 'Tajine de boeuf aux pruneaux caramélisés (1 personne) - Za3louk ou Taktouka - Salade Marocaine - Cornet frites - Boisson gazeuse 25CL - 2 Mini Pains Beldi', image: '/tajine-featured.jpg' },
-      { name: 'Tajine Boulettes De Sardines', price: '44,10 MAD', description: 'Tajine Boulettes De Sardines', image: '/tajine-featured.jpg' },
+      { name: 'Tajine Kefta au Oeufs', price: '62,10 MAD', description: 'Tajine Kefta aux oeufs et sauce Tomate', image: '/tajine-kefta-au-oeuf.jpeg', subcategory: 'kefta' },
+      { name: 'Tajine Poulet Au Daghmira Avec Frites', price: '69,00 MAD', description: 'Tajine Poulet (Cuisse et haut de poulet) au Daghmira et Frites', image: '/tajine-featured.jpg', subcategory: 'chicken' },
+      { name: 'Tajine De Veau Aux Daghmira Avec Frites', price: '67,50 MAD', description: 'Tajine boeuf à la sauce daghmira frites', image: '/tajine-featured.jpg', subcategory: 'beef' },
+      { name: 'Tajine Viande Hachée Kherdoula', price: '62,10 MAD', description: 'Tajine Viande Hachée Kherdoula', image: '/Tajine-Viande-Hachée-Kherdoula.jpeg', subcategory: 'kefta' },
+      { name: 'Tajine De Viande Aux Pruneaux', price: '75,00 MAD', description: 'Tajine de viande de veau aux pruneaux, amandes oeuf et Oignons caramélisés', image: '/tajine-featured.jpg', subcategory: 'beef' },
+      { name: 'Tajine Lbacha', price: '149,00 MAD', description: 'Tajine de boeuf aux pruneaux caramélisés (1 personne) - Za3louk ou Taktouka - Salade Marocaine - Cornet frites - Boisson gazeuse 25CL - 2 Mini Pains Beldi', image: '/tajine-featured.jpg', subcategory: 'beef' },
+      { name: 'Tajine Boulettes De Sardines', price: '44,10 MAD', description: 'Tajine Boulettes De Sardines', image: '/tajine-featured.jpg', subcategory: 'fish' },
     ],
     traditional: [
       { name: 'Seffa Madfouna aux Poulets', price: '62,10 MAD', image: '/Seffa-Madfouna-aux-Poulets.jpeg' },
@@ -122,10 +136,23 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
 
   const allCategories: Category[] = ['coldStarter', 'saladMenu', 'tajine', 'traditional', 'grille', 'sandwiches', 'drinks'];
 
+  const availableSubcategories = useMemo(() => {
+    if (selectedCategory === 'all') return [];
+    const config = SUBCATEGORY_CONFIG[selectedCategory];
+    if (!config) return [];
+    const items = menuItems[selectedCategory] || [];
+    return config.filter(sub =>
+      sub.key === 'all' || items.some(item => item.subcategory === sub.key)
+    );
+  }, [selectedCategory]);
+
   const filteredItems = useMemo(() => {
     const query = searchQuery.toLowerCase();
     const filterByCategory = (category: string) => {
-      const items = menuItems[category];
+      let items = menuItems[category];
+      if (category === selectedCategory && selectedSubcategory !== 'all') {
+        items = items.filter(item => item.subcategory === selectedSubcategory);
+      }
       if (query === '') return items;
       return items.filter(item =>
         item.name.toLowerCase().includes(query) ||
@@ -137,7 +164,7 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
       return Object.fromEntries(allCategories.map(cat => [cat, filterByCategory(cat)]));
     }
     return { [selectedCategory]: filterByCategory(selectedCategory) };
-  }, [searchQuery, selectedCategory]);
+  }, [searchQuery, selectedCategory, selectedSubcategory]);
 
   const cartCount = cart.reduce((sum, i) => sum + i.quantity, 0);
   const cartTotal = cart.reduce((sum, i) => sum + getNumericPrice(i.price) * i.quantity, 0);
@@ -184,13 +211,27 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
     window.open(`https://wa.me/212607595907?text=${message}`, '_blank');
   };
 
+  const subcategoryScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = subcategoryScrollRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      if (e.deltaY === 0) return;
+      e.preventDefault();
+      el.scrollLeft += e.deltaY;
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, []);
+
   if (!visible) return null;
 
   const categoryBtn = (cat: Category, label: string) => (
     <button
       key={cat}
-      onClick={() => setSelectedCategory(cat)}
-      className={`px-4 py-2 rounded-sm font-semibold text-sm uppercase tracking-wider transition-all ${
+      onClick={() => { setSelectedCategory(cat); setSelectedSubcategory('all'); }}
+      className={`px-4 py-2 rounded-sm font-semibold text-sm uppercase tracking-wider transition-all whitespace-nowrap ${
         selectedCategory === cat
           ? 'bg-primary text-black border-2 border-primary'
           : 'border-2 border-primary text-primary hover:bg-primary hover:text-black'
@@ -203,9 +244,35 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
   const renderSection = (key: string, label: string) => {
     const items = (filteredItems as Record<string, MenuItem[]>)[key];
     if (!items || items.length === 0) return null;
+    const config = SUBCATEGORY_CONFIG[key as Category];
+    const sectionSubcats = config
+      ? config.filter(sub => sub.key === 'all' || menuItems[key].some(item => item.subcategory === sub.key))
+      : [];
     return (
       <div className="mb-12" key={key}>
-        <h2 className="text-4xl title-section mb-6 border-b border-primary/40 pb-3">{label}</h2>
+        <h2 className="text-4xl title-section mb-4 border-b border-primary/40 pb-3">{label}</h2>
+
+        {sectionSubcats.length > 1 && (
+          <div className="animate-subcategory-slide-down mb-6 -mx-4 px-4">
+            <div ref={subcategoryScrollRef} className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+              {sectionSubcats.map(sub => (
+                <button
+                  key={sub.key}
+                  onClick={() => { setSelectedCategory(key as Category); setSelectedSubcategory(sub.key); }}
+                  className={`px-3 py-1.5 rounded-sm text-xs font-semibold uppercase tracking-wider transition-all whitespace-nowrap flex-shrink-0 ${
+                    selectedCategory === key && selectedSubcategory === sub.key
+                      ? 'bg-primary text-black border border-primary shadow-md shadow-primary/30'
+                      : 'border border-primary/60 text-primary/80 hover:border-primary hover:text-primary hover:bg-primary/10'
+                  }`}
+                >
+                  {sub.label}
+                </button>
+              ))}
+            </div>
+            <div className="mt-2 mb-2 h-px bg-primary/20" />
+          </div>
+        )}
+
         <div className="grid grid-cols-2 gap-3">
           {items.map((item, idx) => (
             <button
@@ -273,6 +340,7 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
         </div>
 
         {/* Sections */}
+        <div key={`${selectedCategory}-${selectedSubcategory}`} className="animate-menu-fade-in">
         {renderSection('coldStarter', translations.coldStarterCategory)}
         {renderSection('saladMenu', translations.saladMenuCategory)}
         {renderSection('tajine', translations.tajineCategory)}
@@ -287,6 +355,7 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
             <p className="text-foreground/70 text-lg">No items found.</p>
           </div>
         )}
+        </div>{/* end animate-menu-fade-in */}
 
         {/* Back button bottom */}
         <div className="flex justify-center mt-12">
