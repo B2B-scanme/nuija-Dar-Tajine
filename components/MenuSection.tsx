@@ -19,7 +19,7 @@ interface CartItem extends MenuItem {
 type Category = 'all' | 'coldStarter' | 'saladMenu' | 'tajine' | 'traditional' | 'grille' | 'sandwiches' | 'drinks';
 
 const SUBCATEGORY_KEYS: Partial<Record<Category, string[]>> = {
-  tajine: ['all', 'kefta', 'beef', 'chicken', 'lamb', 'fish', 'vegetarian'],
+  tajine: ['all', 'kefta', 'beef', 'chicken'],
 };
 
 interface MenuSectionProps {
@@ -61,24 +61,22 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
 
   const menuItems: Record<string, MenuItem[]> = {
     coldStarter: [
-      { name: 'Entrées Marocaines Froides 3en1', price: '65,00 MAD', description: 'Salade Marocaine - Za3louk - Taktouka', image: '/tajine-featured.jpg' },
-      { name: 'ZAALOUK (froide)', price: '17,10 MAD', image: '/tajine-featured.jpg' },
-      { name: 'TAKTOUKA (froide)', price: '17,10 MAD', image: '/tajine-featured.jpg' },
-      { name: 'Zaalouk', price: '19,00 MAD', image: '/tajine-featured.jpg' },
-      { name: 'Taktouka', price: '19,00 MAD', image: '/tajine-featured.jpg' },
+      { name: 'Taktouka', price: '15,00 MAD', image: '/Taktouka.jpeg' },
+      { name: 'Zaalouk', price: '15,00 MAD', image: '/Zaalouk.jpeg' },
+      { name: 'Trios Nuija', price: '39,00 MAD', description: 'Salade Marocaine - Za3louk & Taktouka', image: '/Trios-Nuija.jpeg' },
     ],
     saladMenu: [
-      { name: 'Salade Nuija', price: '40,50 MAD', description: 'Salade au thon & maïs', image: '/Salade-Nuija.jpeg' },
-      { name: 'Salade Marocaine', price: '22,50 MAD', description: 'Tomates, oignon, poivron vert, olives, slices, sauces', image: '/Salade-Marocaine.jpeg' },
+      { name: 'Salade Marocaine', price: '20,00 MAD', image: '/Salade-Marocaine.jpeg' },
+      { name: 'Salade Nuija', price: '35,00 MAD', image: '/Salade-Nuija.jpeg' },
+      { name: 'Trios Nuija', price: '39,00 MAD', description: 'Salade Marocaine - Za3louk & Taktouka', image: '/Trios-Nuija.jpeg' },
     ],
     tajine: [
-      { name: 'Tajine Kefta au Oeufs', price: '62,10 MAD', description: 'Tajine Kefta aux oeufs et sauce Tomate', image: '/tajine-kefta-au-oeuf.jpeg', subcategory: 'kefta' },
-      { name: 'Tajine Poulet Au Daghmira Avec Frites', price: '69,00 MAD', description: 'Tajine Poulet (Cuisse et haut de poulet) au Daghmira et Frites', image: '/tajine-featured.jpg', subcategory: 'chicken' },
-      { name: 'Tajine De Veau Aux Daghmira Avec Frites', price: '67,50 MAD', description: 'Tajine boeuf à la sauce daghmira frites', image: '/tajine-featured.jpg', subcategory: 'beef' },
-      { name: 'Tajine Viande Hachée Kherdoula', price: '62,10 MAD', description: 'Tajine Viande Hachée Kherdoula', image: '/Tajine-Viande-Hachée-Kherdoula.jpeg', subcategory: 'kefta' },
-      { name: 'Tajine De Viande Aux Pruneaux', price: '75,00 MAD', description: 'Tajine de viande de veau aux pruneaux, amandes oeuf et Oignons caramélisés', image: '/tajine-featured.jpg', subcategory: 'beef' },
-      { name: 'Tajine Lbacha', price: '149,00 MAD', description: 'Tajine de boeuf aux pruneaux caramélisés (1 personne) - Za3louk ou Taktouka - Salade Marocaine - Cornet frites - Boisson gazeuse 25CL - 2 Mini Pains Beldi', image: '/tajine-featured.jpg', subcategory: 'beef' },
-      { name: 'Tajine Boulettes De Sardines', price: '44,10 MAD', description: 'Tajine Boulettes De Sardines', image: '/tajine-featured.jpg', subcategory: 'fish' },
+      { name: 'Tajine Kefta au Oeufs', price: '49,00 MAD', description: 'Tajine Kefta aux oeufs et sauce Tomate', image: '/tajine-kefta-au-oeuf.jpeg', subcategory: 'kefta' },
+      { name: 'Tajine Viande Hachée Kherdoula', price: '45,00 MAD', description: 'Tajine Viande Hachée Kherdoula', image: '/Tajine-Viande-Hachée-Kherdoula.jpeg', subcategory: 'kefta' },
+      { name: 'Tajine de Veau aux Daghmira avec Frites', price: '49,00 MAD', description: 'Tajine de veau à la sauce daghmira avec frites', image: '/Tajine-de-Veau-aux-Daghmira-avec-Frites.jpeg', subcategory: 'beef' },
+      { name: 'Tajine Boeuf au Pruneaux', price: '59,00 MAD', description: 'Tajine de boeuf aux pruneaux caramélisés', image: '/Tajine-Boeuf-au-Pruneaux.jpeg', subcategory: 'beef' },
+      { name: 'Tajine Poulet au Daghmira avec Frites', price: '40,00 MAD', description: 'Tajine poulet au daghmira avec frites', image: '/Tajine-Poulet.jpeg', subcategory: 'chicken' },
+      { name: 'Tajine Foie de Poulet Mcharmel', price: '35,00 MAD', description: 'Tajine foie de poulet mcharmel', image: '/tajine-featured.jpg', subcategory: 'chicken' },
     ],
     traditional: [
       { name: 'Seffa Madfouna aux Poulets', price: '62,10 MAD', image: '/Seffa-Madfouna-aux-Poulets.jpeg' },
