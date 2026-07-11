@@ -22,6 +22,8 @@ export interface TranslationType {
   saladMenuCategory: string;
   tajineCategory: string;
   traditionalCategory: string;
+  couscousCategory: string;
+  couscousFridayLabel: string;
   grilleCategory: string;
   sandwichesCategory: string;
   drinksCategory: string;
@@ -50,11 +52,19 @@ export interface TranslationType {
   tajineSubLamb: string;
   tajineSubFish: string;
   tajineSubVegetarian: string;
+  // Drinks subcategories
+  drinkSubAll: string;
+  drinkSubGaseous: string;
+  drinkSubJuice: string;
+  drinkSubWater: string;
   // Extra UI
   noItemsFound: string;
   cartItemsLabel: string;
   whatsAppOrderIntro: string;
   whatsAppOrderTotal: string;
+  // Size selection
+  sizeLabel: string;
+  fromLabel: string;
 }
 
 export const translations: Record<Language, TranslationType> = {
@@ -76,6 +86,8 @@ export const translations: Record<Language, TranslationType> = {
     saladMenuCategory: 'Salads',
     tajineCategory: 'Tajine',
     traditionalCategory: 'Traditional',
+    couscousCategory: 'Couscous',
+    couscousFridayLabel: 'Special for Friday',
     grilleCategory: 'Charcoal Grilled',
     sandwichesCategory: 'Sandwiches',
     drinksCategory: 'Drinks',
@@ -104,6 +116,12 @@ export const translations: Record<Language, TranslationType> = {
     cartItemsLabel: 'items',
     whatsAppOrderIntro: 'Hello! I would like to order:',
     whatsAppOrderTotal: 'Total',
+    drinkSubAll: 'All Drinks',
+    drinkSubGaseous: 'Gaseous',
+    drinkSubJuice: 'Juice',
+    drinkSubWater: 'Water',
+    sizeLabel: 'Size',
+    fromLabel: 'From',
   },
   fr: {
     restaurantName: 'Nuija Dar Tajine',
@@ -123,6 +141,8 @@ export const translations: Record<Language, TranslationType> = {
     saladMenuCategory: 'Salades',
     tajineCategory: 'Tajine',
     traditionalCategory: 'Traditionnel',
+    couscousCategory: 'Couscous',
+    couscousFridayLabel: 'Spécial Vendredi',
     grilleCategory: 'Grillé au Charbon',
     sandwichesCategory: 'Sandwiches',
     drinksCategory: 'Boissons',
@@ -151,6 +171,12 @@ export const translations: Record<Language, TranslationType> = {
     cartItemsLabel: 'articles',
     whatsAppOrderIntro: 'Bonjour ! Je voudrais commander :',
     whatsAppOrderTotal: 'Total',
+    drinkSubAll: 'Toutes les Boissons',
+    drinkSubGaseous: 'Gazeuses',
+    drinkSubJuice: 'Jus',
+    drinkSubWater: 'Eau',
+    sizeLabel: 'Taille',
+    fromLabel: 'À partir de',
   },
   ar: {
     restaurantName: 'نويجة دار تاجين',
@@ -170,6 +196,8 @@ export const translations: Record<Language, TranslationType> = {
     saladMenuCategory: 'السلطات',
     tajineCategory: 'طاجين',
     traditionalCategory: 'تقليدي',
+    couscousCategory: 'كسكس',
+    couscousFridayLabel: 'خاص ليوم الجمعة',
     grilleCategory: 'مشوي على الفحم',
     sandwichesCategory: 'سندويشات',
     drinksCategory: 'المشروبات',
@@ -198,6 +226,12 @@ export const translations: Record<Language, TranslationType> = {
     cartItemsLabel: 'عناصر',
     whatsAppOrderIntro: 'مرحباً! أود الطلب:',
     whatsAppOrderTotal: 'المجموع',
+    drinkSubAll: 'كل المشروبات',
+    drinkSubGaseous: 'غازية',
+    drinkSubJuice: 'عصائر',
+    drinkSubWater: 'ماء',
+    sizeLabel: 'الحجم',
+    fromLabel: 'ابتداءً من',
   },
 };
 

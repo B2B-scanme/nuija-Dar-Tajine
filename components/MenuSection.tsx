@@ -4,22 +4,29 @@ import { useState, useMemo, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { TranslationType } from '@/lib/translations';
 
+interface MenuItemSize {
+  label: string;
+  price: string;
+}
+
 interface MenuItem {
   name: string;
   price?: string;
   description?: string;
   image: string;
   subcategory?: string;
+  sizes?: MenuItemSize[];
 }
 
 interface CartItem extends MenuItem {
   quantity: number;
 }
 
-type Category = 'all' | 'coldStarter' | 'saladMenu' | 'tajine' | 'traditional' | 'grille' | 'sandwiches' | 'drinks';
+type Category = 'all' | 'coldStarter' | 'saladMenu' | 'tajine' | 'traditional' | 'couscous' | 'grille' | 'sandwiches' | 'drinks';
 
 const SUBCATEGORY_KEYS: Partial<Record<Category, string[]>> = {
-  tajine: ['all', 'kefta', 'beef', 'chicken'],
+  tajine: ['all', 'kefta', 'beef', 'chicken', 'fish'],
+  drinks: ['all', 'gaseous', 'juice', 'water'],
 };
 
 interface MenuSectionProps {
@@ -36,18 +43,24 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [selectedItemCategory, setSelectedItemCategory] = useState('');
   const [itemQty, setItemQty] = useState(1);
+  const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [showCart, setShowCart] = useState(false);
 
-  const getSubLabel = (key: string): string => {
+  const getSubLabel = (key: string, category?: string): string => {
+    if (key === 'all') {
+      return category === 'drinks' ? translations.drinkSubAll : translations.tajineSubAll;
+    }
     const map: Record<string, string> = {
-      all:        translations.tajineSubAll,
       kefta:      translations.tajineSubKefta,
       beef:       translations.tajineSubBeef,
       chicken:    translations.tajineSubChicken,
       lamb:       translations.tajineSubLamb,
       fish:       translations.tajineSubFish,
       vegetarian: translations.tajineSubVegetarian,
+      gaseous:    translations.drinkSubGaseous,
+      juice:      translations.drinkSubJuice,
+      water:      translations.drinkSubWater,
     };
     return map[key] ?? key;
   };
@@ -77,6 +90,12 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
       { name: 'Tajine Boeuf au Pruneaux', price: '59,00 MAD', description: 'Tajine de boeuf aux pruneaux caramélisés', image: '/Tajine-Boeuf-au-Pruneaux.jpeg', subcategory: 'beef' },
       { name: 'Tajine Poulet au Daghmira avec Frites', price: '40,00 MAD', description: 'Tajine poulet au daghmira avec frites', image: '/Tajine-Poulet.jpeg', subcategory: 'chicken' },
       { name: 'Tajine Foie de Poulet Mcharmel', price: '35,00 MAD', description: 'Tajine foie de poulet mcharmel', image: '/tajine-featured.jpg', subcategory: 'chicken' },
+      { name: 'Tajine Boulettes de Sardines', price: '44,00 MAD', description: 'Tajine boulettes de sardines', image: '/tajine-featured.jpg', subcategory: 'fish' },
+    ],
+    couscous: [
+      { name: 'Couscous au Poulet', price: '55,00 MAD', description: 'Couscous traditionnel au poulet avec légumes', image: '/couscous.jpeg' },
+      { name: 'Couscous au Boeuf', price: '65,00 MAD', description: 'Couscous traditionnel au boeuf avec légumes', image: '/couscous.jpeg' },
+      { name: 'Couscous Royal', price: '75,00 MAD', description: 'Couscous royal mixte (poulet, boeuf, merguez)', image: '/couscous.jpeg' },
     ],
     traditional: [
       { name: 'Seffa Madfouna aux Poulets', price: '62,10 MAD', image: '/Seffa-Madfouna-aux-Poulets.jpeg' },
@@ -91,21 +110,8 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
       { name: '500gr Lhem Rass Mbakher', price: '189,00 MAD', description: '500gr Lhem Rass de veau Mbakher', image: '/tajine-featured.jpg' },
     ],
     grille: [
-      { name: 'KEFTA Grillée avec Frites & Salade Marocaine + Coca', price: '143,10 MAD', description: '200gr (avant cuisant) KEFTA grillée au charbon - Salade Marocaine - Cornet Frites - Boissons gazeuses - Pain Beldi', image: '/tajine-featured.jpg' },
-      { name: 'Kebda (Foie) Grillée avec Frites & Salade Marocaine + Coca', price: '169,00 MAD', description: '200gr (avant cuisant) Grillée au charbon - Salade Marocaine - Cornet Frites - Pain Beldi - Boisson Gazeuse', image: '/tajine-featured.jpg' },
-      { name: 'Chad Trik', price: '249,00 MAD', description: 'Machwi kefta (avant cuisant) 400gr - Salade Marocaine - 2 Cornets frites - 2 Boissons gazeuse 25CL - 2 Mini Pains Beldi', image: '/tajine-featured.jpg' },
-      { name: 'Brochettes de Foie', price: '199,00 MAD', description: '5 Brochettes de Foie - Salade Marocaine - Cornet Frites - Boisson gazeuse - Pain Beldi', image: '/tajine-featured.jpg' },
-      { name: '200gr De Foie Grillé Au Charbon', price: '99,00 MAD', description: '200gr De Foie Grillé Au Charbon', image: '/200gr-De-Foie-Grillé-Au-Charbon.jpeg' },
-      { name: '200gr De Tehale Grillé Au Charbon', price: '89,00 MAD', description: '200gr De Tehale Grillé Au Charbon', image: '/tajine-featured.jpg' },
-      { name: '200gr De Viande Hachée Grillée Au Charbon', price: '85,00 MAD', description: '200gr De Viande hachée Grillée Au Charbon', image: '/200gr-De-Viande-hachée-Grillée-Au-Charbon.jpeg' },
-      { name: '200gr De Saucisses Grillée Au Charbon', price: '79,00 MAD', description: '200gr De Saucisses Grillée Au Charbon', image: '/200gr-De-Saucisses-Grillée-Au-Charbon.jpeg' },
-      { name: '200gr De Dinde Brochette Grillée Au Charbon', price: '59,00 MAD', description: '200gr De Dinde Brochette Grillée Au Charbon', image: '/200gr-De-Dinde-Brochette-Grillée-Au-Charbon.jpeg' },
-      { name: '200gr De Dinde Steak Grillé Au Charbon', price: '59,00 MAD', description: '200gr De Dinde Steak Grillé Au Charbon', image: '/200gr-De-Dinde-Steak-Grillé-Au-Charbon.jpeg' },
-      { name: 'Tehale Grillé Au Charbon 1kg + 4 Rations Frites et Boissons', price: '449,00 MAD', description: '1kg Téhale Grillée Au Charbon - 4 Rations Frites - 4 Boissons Gazeuses - 4 Pains Beldi', image: '/tajine-featured.jpg' },
-      { name: 'Viande Hachée Grillée Au Charbon 1kg + 4 Rations Frites + 4 Boissons', price: '399,00 MAD', description: '1kg Viande Hachée Grillée Au Charbon - 4 Rations Frites - 4 Boissons Gazeuses - 4 Pains Beldi', image: '/tajine-featured.jpg' },
-      { name: 'Saucisses Grillée Au Charbon 1kg + 4 Rations Frites et Boissons', price: '399,00 MAD', description: '1kg Saucisses Grillée Au Charbon - 4 Rations Frites - 4 Boissons Gazeuses - 4 Pains Beldi', image: '/tajine-featured.jpg' },
-      { name: 'Dinde Brochette Grillé Au Charbon 1kg + 4 Rations Frites et Boissons', price: '259,00 MAD', description: '1kg Dinde Brochette Grillée Au Charbon - 4 Rations Frites - 4 Boissons Gazeuses - 4 Pains Beldi', image: '/tajine-featured.jpg' },
-      { name: 'Dinde Steak Grillé Au Charbon 1kg + 4 Rations Frites et 4 Boissons', price: '259,00 MAD', description: '1kg Dinde Steak Grillée Au Charbon - 4 Rations Frites - 4 Boissons Gazeuses - 4 Pains Beldi', image: '/tajine-featured.jpg' },
+      { name: 'Chad Trik', price: '249,00 MAD', description: 'Machwi kefta (avant cuisant) 400gr - Salade Marocaine - 2 Cornets frites - 2 Boissons gazeuse 25CL - 2 Mini Pains Beldi', image: '/chad-trique.png' },
+      { name: 'Mchkel', image: '/mchekl.png' },
     ],
     sandwiches: [
       { name: 'Sandwich Kebda + Coca 25cl', price: '89,00 MAD', description: 'Sandwich Kebda + Coca 25cl', image: '/tajine-featured.jpg' },
@@ -114,30 +120,33 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
       { name: 'Sandwich Brochette de Poulet & Boisson Gazeuse 25cl', price: '59,00 MAD', description: 'Sandwich Brochette de poulet & Boisson Gazeuse 25cl', image: '/tajine-featured.jpg' },
     ],
     drinks: [
-      { name: "Lben A L'ancienne 33cl", price: '8,00 MAD', description: 'Lben beldi', image: '/tajine-featured.jpg' },
-      { name: 'Jus Panaché 33cl', price: '35,00 MAD', image: '/Jus-Panaché-33cl.jpeg' },
-      { name: 'Jus de Banane aux Oranges 33cl', price: '30,00 MAD', image: '/tajine-featured.jpg' },
-      { name: 'Jus de Pomme aux Oranges 33cl', price: '30,00 MAD', image: '/tajine-featured.jpg' },
-      { name: "Jus D'orange 33cl", price: '28,00 MAD', image: '/Jus-Dorange-33cl.jpeg' },
-      { name: 'Jus de Banane au Lait 33cl', price: '28,00 MAD', image: '/tajine-featured.jpg' },
-      { name: 'Jus De Pomme au Lait 33cl', price: '28,00 MAD', image: '/tajine-featured.jpg' },
-      { name: 'Boisson Énergétique 25cl', price: '23,00 MAD', description: 'Boisson Énergétique 25cl', image: '/tajine-featured.jpg' },
-      { name: 'Oulmes 1L', price: '19,00 MAD', image: '/tajine-featured.jpg' },
-      { name: 'Schweppes Mojito 25cl', price: '15,00 MAD', description: 'Schweppes Mojito Canette 25cl', image: '/tajine-featured.jpg' },
-      { name: 'Sidi Ali 1,5L', price: '15,00 MAD', image: '/tajine-featured.jpg' },
-      { name: 'Hawaï Tropical 25cl', price: '13,00 MAD', description: 'Canette 25cl', image: '/tajine-featured.jpg' },
-      { name: 'Coca-Cola 25cl', price: '12,00 MAD', description: 'Canette 25cl', image: '/tajine-featured.jpg' },
-      { name: 'Fanta Orange 25cl', price: '12,00 MAD', description: 'Canette 25cl', image: '/tajine-featured.jpg' },
-      { name: 'Fanta Citron 25cl', price: '12,00 MAD', description: 'Canette 25cl', image: '/tajine-featured.jpg' },
-      { name: 'Sprite 25cl', price: '12,00 MAD', description: 'Canette 25cl', image: '/tajine-featured.jpg' },
-      { name: 'Pepsi Canette 25cl', price: '12,00 MAD', description: 'Canette 25cl', image: '/tajine-featured.jpg' },
-      { name: "Pom's 25cl", price: '12,00 MAD', description: 'Canette 25cl', image: '/tajine-featured.jpg' },
-      { name: 'Oulmes Eaux Minérale Gazeuse 50cl', price: '12,00 MAD', image: '/tajine-featured.jpg' },
-      { name: 'CIGOGNE 25cl', price: '12,00 MAD', description: 'Cigogne canette 25cl', image: '/tajine-featured.jpg' },
+      { name: "Lben A L'ancienne 33cl", price: '8,00 MAD', description: 'Lben beldi', image: '/lben.png', subcategory: 'juice' },
+      { name: 'Jus Panaché 33cl', price: '35,00 MAD', image: '/Jus-Panaché-33cl.jpeg', subcategory: 'juice' },
+      { name: 'Jus de Banane aux Oranges 33cl', price: '30,00 MAD', image: '/Banane-aux-Oranges.jpeg', subcategory: 'juice' },
+      { name: 'Jus de Pomme aux Oranges 33cl', price: '30,00 MAD', image: '/Pomme-aux-Oranges.png', subcategory: 'juice' },
+      { name: "Jus D'orange 33cl", price: '28,00 MAD', image: '/Jus-Dorange-33cl.jpeg', subcategory: 'juice' },
+      { name: 'Jus de Banane au Lait 33cl', price: '28,00 MAD', image: '/Banane-au-Lait.jpeg', subcategory: 'juice' },
+      { name: 'Jus De Pomme au Lait 33cl', price: '28,00 MAD', image: '/Pomme-au-Lait.jpeg', subcategory: 'juice' },
+      { name: 'Boisson Énergétique 25cl', price: '23,00 MAD', description: 'Boisson Énergétique 25cl', image: '/energy-drink.png', subcategory: 'gaseous' },
+      {
+        name: 'Oulmes',
+        description: 'Eau minérale gazeuse',
+        image: '/Oulmes.png',
+        subcategory: 'gaseous',
+        sizes: [
+          { label: '33cl', price: '10,00 MAD' },
+          { label: '50cl', price: '12,00 MAD' },
+          { label: '1L', price: '19,00 MAD' },
+        ],
+      },
+      { name: 'Schweppes Mojito 25cl', price: '15,00 MAD', description: 'Schweppes Mojito Canette 25cl', image: '/mojito.png', subcategory: 'gaseous' },
+      { name: 'Sidi Ali 1,5L', price: '15,00 MAD', image: '/sidi-ali.jpeg', subcategory: 'water' },
+      { name: 'Hawaï Tropical 25cl', price: '13,00 MAD', description: 'Canette 25cl', image: '/hawai.png', subcategory: 'gaseous' },
+      { name: 'Sodas 25cl', price: '12,00 MAD', description: 'Canette 25cl au choix : Coca-Cola, Fanta Orange, Fanta Citron, Sprite, Pepsi ou Pom’s', image: '/Canette.jpeg', subcategory: 'gaseous' },
     ],
   };
 
-  const allCategories: Category[] = ['coldStarter', 'saladMenu', 'tajine', 'traditional', 'grille', 'sandwiches', 'drinks'];
+  const allCategories: Category[] = ['coldStarter', 'saladMenu', 'tajine', 'traditional', 'couscous', 'grille', 'sandwiches', 'drinks'];
 
   const availableSubcategories = useMemo(() => {
     if (selectedCategory === 'all') return [];
@@ -174,6 +183,7 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
     setSelectedItemCategory(category);
     setSelectedItem(item);
     setItemQty(1);
+    setSelectedSizeIndex(0);
   };
 
   const closeItem = () => {
@@ -183,12 +193,15 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
 
   const addToCart = () => {
     if (!selectedItem) return;
+    const size = selectedItem.sizes?.[selectedSizeIndex];
+    const cartName = size ? `${selectedItem.name} - ${size.label}` : selectedItem.name;
+    const cartPrice = size ? size.price : selectedItem.price;
     setCart(prev => {
-      const existing = prev.find(i => i.name === selectedItem.name);
+      const existing = prev.find(i => i.name === cartName);
       if (existing) {
-        return prev.map(i => i.name === selectedItem.name ? { ...i, quantity: i.quantity + itemQty } : i);
+        return prev.map(i => i.name === cartName ? { ...i, quantity: i.quantity + itemQty } : i);
       }
-      return [...prev, { ...selectedItem, quantity: itemQty }];
+      return [...prev, { ...selectedItem, name: cartName, price: cartPrice, quantity: itemQty }];
     });
     closeItem();
   };
@@ -251,7 +264,12 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
       : [];
     return (
       <div className="mb-12" key={key}>
-        <h2 className="text-4xl title-section mb-4 border-b border-primary/40 pb-3">{label}</h2>
+        <h2 className="text-4xl title-section mb-1 border-b border-primary/40 pb-3">{label}</h2>
+        {key === 'couscous' && (
+          <p className="text-primary/70 text-xs uppercase tracking-[0.25em] font-serif mb-4">
+            ✦ {translations.couscousFridayLabel} ✦
+          </p>
+        )}
 
         {sectionSubcats.length > 1 && (
           <div className="animate-subcategory-slide-down mb-6 -mx-4 px-4">
@@ -266,7 +284,7 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
                       : 'border border-primary/60 text-primary/80 hover:border-primary hover:text-primary hover:bg-primary/10'
                   }`}
                 >
-                  {getSubLabel(subKey)}
+                  {getSubLabel(subKey, key)}
                 </button>
               ))}
             </div>
@@ -287,7 +305,10 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
               </div>
               <div className="absolute bottom-0 left-0 right-0 p-3">
                 <p className="text-sm font-semibold text-foreground leading-tight">{item.name}</p>
-                <p className="text-primary text-base price-tag">{item.price ?? translations.priceOnRequest}</p>
+                <p className="text-primary text-base price-tag">
+                  {item.price
+                    ?? (item.sizes ? `${translations.fromLabel} ${item.sizes[0].price}` : translations.priceOnRequest)}
+                </p>
               </div>
             </button>
           ))}
@@ -335,6 +356,7 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
           {categoryBtn('saladMenu', translations.saladMenuCategory)}
           {categoryBtn('tajine', translations.tajineCategory)}
           {categoryBtn('traditional', translations.traditionalCategory)}
+          {categoryBtn('couscous', translations.couscousCategory)}
           {categoryBtn('grille', translations.grilleCategory)}
           {categoryBtn('sandwiches', translations.sandwichesCategory)}
           {categoryBtn('drinks', translations.drinksCategory)}
@@ -346,6 +368,7 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
         {renderSection('saladMenu', translations.saladMenuCategory)}
         {renderSection('tajine', translations.tajineCategory)}
         {renderSection('traditional', translations.traditionalCategory)}
+        {renderSection('couscous', translations.couscousCategory)}
         {renderSection('grille', translations.grilleCategory)}
         {renderSection('sandwiches', translations.sandwichesCategory)}
         {renderSection('drinks', translations.drinksCategory)}
@@ -374,6 +397,7 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
         const isSalad  = selectedItemCategory === 'saladMenu';
         const isTrad   = selectedItemCategory === 'traditional';
         const isDrinks = selectedItemCategory === 'drinks';
+        const activePrice = selectedItem.sizes?.[selectedSizeIndex]?.price ?? selectedItem.price;
 
         /* ── per-category theme tokens ── */
         const theme = isSalad ? {
@@ -525,7 +549,7 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
                 <div className="absolute bottom-5 left-5 z-[3]">
                   <span className="price-tag text-base px-4 py-2 rounded-full"
                     style={{ background: theme.badgeBg, color: theme.badgeColor, boxShadow: theme.badgeShadow }}>
-                    {selectedItem.price ?? translations.priceOnRequest}
+                    {activePrice ?? translations.priceOnRequest}
                   </span>
                 </div>
               </div>
@@ -567,6 +591,29 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
                   <div className="flex-1 h-px" style={{ background: theme.divLine }} />
                 </div>
 
+                {/* Size selector */}
+                {selectedItem.sizes && (
+                  <div className="flex items-center gap-2 mb-5 flex-wrap">
+                    <span className="text-xs uppercase tracking-wider font-semibold mr-1" style={{ color: theme.descColor }}>
+                      {translations.sizeLabel}
+                    </span>
+                    {selectedItem.sizes.map((size, idx) => (
+                      <button
+                        key={size.label}
+                        onClick={() => setSelectedSizeIndex(idx)}
+                        className="px-4 py-2 rounded-full text-sm font-semibold transition-all active:scale-95"
+                        style={
+                          idx === selectedSizeIndex
+                            ? { background: theme.ctaBg, color: theme.ctaColor, boxShadow: theme.ctaShadow }
+                            : { background: theme.qtyBg, border: theme.qtyBorder, color: theme.qtyNum }
+                        }
+                      >
+                        {size.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
                 {/* Quantity + CTA */}
                 <div className="flex items-center gap-3">
 
@@ -591,10 +638,10 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
                       style={{ background: 'linear-gradient(120deg,transparent 30%,rgba(255,255,255,0.15) 50%,transparent 70%)' }} />
                     <span className="relative z-[1] flex items-center justify-center gap-2">
                       <span>{translations.addToCart}</span>
-                      {selectedItem.price && (
+                      {activePrice && (
                         <>
                           <span className="opacity-50">·</span>
-                          <span className="price-tag">{(getNumericPrice(selectedItem.price) * itemQty).toFixed(2)} MAD</span>
+                          <span className="price-tag">{(getNumericPrice(activePrice) * itemQty).toFixed(2)} MAD</span>
                         </>
                       )}
                     </span>
