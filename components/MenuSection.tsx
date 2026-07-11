@@ -95,7 +95,7 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
     couscous: [
       { name: 'Couscous au Poulet', price: '55,00 MAD', description: 'Couscous traditionnel au poulet avec légumes', image: '/couscous.jpeg' },
       { name: 'Couscous au Boeuf', price: '65,00 MAD', description: 'Couscous traditionnel au boeuf avec légumes', image: '/couscous.jpeg' },
-      { name: 'Couscous Royal', price: '75,00 MAD', description: 'Couscous royal mixte (poulet, boeuf, merguez)', image: '/couscous.jpeg' },
+      { name: 'Couscous ', price: '75,00 MAD', description: 'Couscous ', image: '/couscous.jpeg' },
     ],
     traditional: [
       { name: 'Seffa Madfouna aux Poulets', price: '62,10 MAD', image: '/Seffa-Madfouna-aux-Poulets.jpeg' },
@@ -266,9 +266,11 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
       <div className="mb-12" key={key}>
         <h2 className="text-4xl title-section mb-1 border-b border-primary/40 pb-3">{label}</h2>
         {key === 'couscous' && (
-          <p className="text-primary/70 text-xs uppercase tracking-[0.25em] font-serif mb-4">
-            ✦ {translations.couscousFridayLabel} ✦
-          </p>
+          <div className="flex justify-center mb-5">
+            <span className="animate-friday-pulse inline-flex items-center gap-2 bg-primary text-black px-5 py-2.5 rounded-full text-sm sm:text-base font-bold uppercase tracking-wider shadow-lg shadow-primary/30">
+              ✦ {translations.couscousFridayLabel} ✦
+            </span>
+          </div>
         )}
 
         {sectionSubcats.length > 1 && (
