@@ -62,6 +62,7 @@ export default function Home() {
         ) : (
           <MenuSection
             translations={translations}
+            language={language}
             visible={showMenu}
             onBackClick={handleBackClick}
             isArabic={isArabic}

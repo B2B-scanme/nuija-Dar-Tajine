@@ -2,23 +2,34 @@
 
 import { useState, useMemo, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import { TranslationType } from '@/lib/translations';
+import { TranslationType, Language } from '@/lib/translations';
 
 interface MenuItemSize {
   label: string;
   price: string;
 }
 
+interface LocalizedText {
+  en: string;
+  fr: string;
+  ar: string;
+}
+
 interface MenuItem {
-  name: string;
+  id: string;
+  name: LocalizedText;
   price?: string;
-  description?: string;
+  description?: LocalizedText;
   image: string;
   subcategory?: string;
   sizes?: MenuItemSize[];
 }
 
-interface CartItem extends MenuItem {
+interface CartItem {
+  id: string;
+  name: string;
+  price?: string;
+  image: string;
   quantity: number;
 }
 
@@ -31,12 +42,13 @@ const SUBCATEGORY_KEYS: Partial<Record<Category, string[]>> = {
 
 interface MenuSectionProps {
   translations: TranslationType;
+  language: Language;
   visible: boolean;
   onBackClick: () => void;
   isArabic: boolean;
 }
 
-export function MenuSection({ translations, visible, onBackClick, isArabic }: MenuSectionProps) {
+export function MenuSection({ translations, language, visible, onBackClick, isArabic }: MenuSectionProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<Category>('all');
   const [selectedSubcategory, setSelectedSubcategory] = useState('all');
@@ -46,6 +58,8 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
   const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [showCart, setShowCart] = useState(false);
+
+  const getLocalized = (text: LocalizedText): string => text[language] || text.fr;
 
   const getSubLabel = (key: string, category?: string): string => {
     if (key === 'all') {
@@ -74,60 +88,60 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
 
   const menuItems: Record<string, MenuItem[]> = {
     coldStarter: [
-      { name: 'Taktouka', price: '15,00 MAD', image: '/Taktouka.jpeg' },
-      { name: 'Zaalouk', price: '15,00 MAD', image: '/Zaalouk.jpeg' },
-      { name: 'Trios Nuija', price: '39,00 MAD', description: 'Salade Marocaine - Za3louk & Taktouka', image: '/Trios-Nuija.jpeg' },
+      { id: 'taktouka', name: { fr: 'Taktouka', en: 'Taktouka', ar: 'تكتوكة' }, price: '15,00 MAD', image: '/Taktouka.jpeg' },
+      { id: 'zaalouk', name: { fr: 'Zaalouk', en: 'Zaalouk', ar: 'زعلوك' }, price: '15,00 MAD', image: '/Zaalouk.jpeg' },
+      { id: 'trios-nuija', name: { fr: 'Trios Nuija', en: 'Nuija Trio', ar: 'ثلاثية نويجة' }, price: '39,00 MAD', description: { fr: 'Salade Marocaine - Za3louk & Taktouka', en: 'Moroccan Salad - Zaalouk & Taktouka', ar: 'سلطة مغربية - زعلوك وتكتوكة' }, image: '/Trios-Nuija.jpeg' },
     ],
     saladMenu: [
-      { name: 'Salade Marocaine', price: '20,00 MAD', image: '/Salade-Marocaine.jpeg' },
-      { name: 'Salade Nuija', price: '35,00 MAD', image: '/Salade-Nuija.jpeg' },
-      { name: 'Trios Nuija', price: '39,00 MAD', description: 'Salade Marocaine - Za3louk & Taktouka', image: '/Trios-Nuija.jpeg' },
+      { id: 'salade-marocaine', name: { fr: 'Salade Marocaine', en: 'Moroccan Salad', ar: 'سلطة مغربية' }, price: '20,00 MAD', image: '/Salade-Marocaine.jpeg' },
+      { id: 'salade-nuija', name: { fr: 'Salade Nuija', en: 'Nuija Salad', ar: 'سلطة نويجة' }, price: '35,00 MAD', image: '/Salade-Nuija.jpeg' },
+      { id: 'trios-nuija', name: { fr: 'Trios Nuija', en: 'Nuija Trio', ar: 'ثلاثية نويجة' }, price: '39,00 MAD', description: { fr: 'Salade Marocaine - Za3louk & Taktouka', en: 'Moroccan Salad - Zaalouk & Taktouka', ar: 'سلطة مغربية - زعلوك وتكتوكة' }, image: '/Trios-Nuija.jpeg' },
     ],
     tajine: [
-      { name: 'Tajine Kefta au Oeufs', price: '49,00 MAD', description: 'Tajine Kefta aux oeufs et sauce Tomate', image: '/tajine-kefta-au-oeuf.jpeg', subcategory: 'kefta' },
-      { name: 'Tajine Viande Hachée Kherdoula', price: '45,00 MAD', description: 'Tajine Viande Hachée Kherdoula', image: '/Tajine-Viande-Hachée-Kherdoula.jpeg', subcategory: 'kefta' },
-      { name: 'Tajine de Veau aux Daghmira avec Frites', price: '49,00 MAD', description: 'Tajine de veau à la sauce daghmira avec frites', image: '/Tajine-de-Veau-aux-Daghmira-avec-Frites.jpeg', subcategory: 'beef' },
-      { name: 'Tajine Boeuf au Pruneaux', price: '59,00 MAD', description: 'Tajine de boeuf aux pruneaux caramélisés', image: '/Tajine-Boeuf-au-Pruneaux.jpeg', subcategory: 'beef' },
-      { name: 'Tajine Poulet au Daghmira avec Frites', price: '40,00 MAD', description: 'Tajine poulet au daghmira avec frites', image: '/Tajine-Poulet.jpeg', subcategory: 'chicken' },
-      { name: 'Tajine Foie de Poulet Mcharmel', price: '35,00 MAD', description: 'Tajine foie de poulet mcharmel', image: '/tajine-featured.jpg', subcategory: 'chicken' },
-      { name: 'Tajine Boulettes de Sardines', price: '40,00 MAD', description: 'Tajine boulettes de sardines', image: '/sardin.png', subcategory: 'fish' },
+      { id: 'tajine-kefta-oeufs', name: { fr: 'Tajine Kefta au Oeufs', en: 'Kefta Tajine with Eggs', ar: 'طاجين كفتة بالبيض' }, price: '49,00 MAD', description: { fr: 'Tajine Kefta aux oeufs et sauce Tomate', en: 'Kefta tajine with eggs in tomato sauce', ar: 'طاجين كفتة بالبيض وصلصة الطماطم' }, image: '/tajine-kefta-au-oeuf.jpeg', subcategory: 'kefta' },
+      { id: 'tajine-kherdoula', name: { fr: 'Tajine Viande Hachée Kherdoula', en: 'Kherdoula Minced Meat Tajine', ar: 'طاجين خردولة باللحم المفروم' }, price: '45,00 MAD', description: { fr: 'Tajine Viande Hachée Kherdoula', en: 'Minced meat tajine, Kherdoula style', ar: 'طاجين لحم مفروم على طريقة خردولة' }, image: '/Tajine-Viande-Hachée-Kherdoula.jpeg', subcategory: 'kefta' },
+      { id: 'tajine-veau-daghmira', name: { fr: 'Tajine de Veau aux Daghmira avec Frites', en: 'Veal Tajine with Daghmira Sauce & Fries', ar: 'طاجين لحم  بصلصة الدغميرة مع البطاطس المقلية' }, price: '49,00 MAD', description: { fr: 'Tajine de veau à la sauce daghmira avec frites', en: 'Veal tajine in daghmira sauce, served with fries', ar: 'طاجين لحم  بصلصة الدغميرة، يقدم مع البطاطس المقلية' }, image: '/Tajine-de-Veau-aux-Daghmira-avec-Frites.jpeg', subcategory: 'beef' },
+      { id: 'tajine-boeuf-pruneaux', name: { fr: 'Tajine Boeuf au Pruneaux', en: 'Beef Tajine with Prunes', ar: 'طاجين لحم البقر بالبرقوق' }, price: '59,00 MAD', description: { fr: 'Tajine de boeuf aux pruneaux caramélisés', en: 'Beef tajine with caramelized prunes', ar: 'طاجين لحم البقر بالبرقوق المكرمل' }, image: '/Tajine-Boeuf-au-Pruneaux.jpeg', subcategory: 'beef' },
+      { id: 'tajine-poulet-daghmira', name: { fr: 'Tajine Poulet au Daghmira avec Frites', en: 'Chicken Tajine with Daghmira Sauce & Fries', ar: 'طاجين دجاج بصلصة الدغميرة مع البطاطس المقلية' }, price: '40,00 MAD', description: { fr: 'Tajine poulet au daghmira avec frites', en: 'Chicken tajine in daghmira sauce with fries', ar: 'طاجين دجاج بصلصة الدغميرة مع البطاطس المقلية' }, image: '/Tajine-Poulet.jpeg', subcategory: 'chicken' },
+      { id: 'tajine-foie-mcharmel', name: { fr: 'Tajine Foie de Poulet Mcharmel', en: 'Mcharmel Chicken Liver Tajine', ar: 'طاجين كبدة الدجاج مشرمل' }, price: '35,00 MAD', description: { fr: 'Tajine foie de poulet mcharmel', en: 'Chicken liver tajine, Mcharmel style', ar: 'طاجين كبدة الدجاج على طريقة مشرمل' }, image: '/tajine-featured.jpg', subcategory: 'chicken' },
+      { id: 'tajine-sardines', name: { fr: 'Tajine Boulettes de Sardines', en: 'Sardine Meatball Tajine', ar: 'طاجين كرات السردين' }, price: '40,00 MAD', description: { fr: 'Tajine boulettes de sardines', en: 'Tajine with sardine meatballs', ar: 'طاجين بكرات السردين' }, image: '/sardin.png', subcategory: 'fish' },
     ],
     couscous: [
-      { name: 'Couscous au Poulet', price: '50,00 MAD', description: 'Couscous traditionnel au poulet avec légumes', image: '/couscous.jpeg' },
-      { name: 'Couscous au Boeuf', price: '50,00 MAD', description: 'Couscous traditionnel au boeuf avec légumes', image: '/couscous.jpeg' },
-      { name: 'Couscous vegetarian ', price: '40,00 MAD', description: 'Couscous traditionnel aux légumes', image: '/couscous.jpeg' },
+      { id: 'couscous-poulet', name: { fr: 'Couscous au Poulet', en: 'Chicken Couscous', ar: 'كسكس بالدجاج' }, price: '50,00 MAD', description: { fr: 'Couscous traditionnel au poulet avec légumes', en: 'Traditional couscous with chicken and vegetables', ar: 'كسكس تقليدي بالدجاج والخضر' }, image: '/couscous.jpeg' },
+      { id: 'couscous-boeuf', name: { fr: 'Couscous au Boeuf', en: 'Beef Couscous', ar: 'كسكس باللحم البقري' }, price: '50,00 MAD', description: { fr: 'Couscous traditionnel au boeuf avec légumes', en: 'Traditional couscous with beef and vegetables', ar: 'كسكس تقليدي باللحم البقري والخضر' }, image: '/couscous.jpeg' },
+      { id: 'couscous-vegetarian', name: { fr: 'Couscous Végétarien', en: 'Vegetarian Couscous', ar: 'كسكس نباتي' }, price: '40,00 MAD', description: { fr: 'Couscous traditionnel aux légumes', en: 'Traditional couscous with vegetables', ar: 'كسكس تقليدي بالخضر' }, image: '/couscous.jpeg' },
     ],
     traditional: [
-      { name: 'Seffa Madfouna aux Poulets', price: '62,10 MAD', image: '/Seffa-Madfouna-aux-Poulets.jpeg' },
-      { name: 'Seffa au Raisins Secs', price: '44,10 MAD', description: "Seffa aux cheveux d'ange", image: '/Seffa-au-raisins-Secs.jpeg' },
-      { name: 'Rfissa au Poulet', price: '62,10 MAD', description: 'Rfissa, Madhoussa ou Trid au Poulet', image: '/Rfissa-au-Poulet.jpeg' },
-      { name: 'Haricots', price: '18,00 MAD', description: 'Bol Haricots', image: '/Haricots.jpeg' },
-      { name: 'Plat Lentilles', price: '18,00 MAD', description: 'Bol Lentilles', image: '/Lentilles.png' },
+      { id: 'seffa-madfouna', name: { fr: 'Seffa Madfouna aux Poulets', en: 'Seffa Madfouna with Chicken', ar: 'سفة مدفونة بالدجاج' }, price: '50,00 MAD', image: '/Seffa-Madfouna-aux-Poulets.jpeg' },
+      { id: 'seffa-raisins', name: { fr: 'Seffa au Raisins Secs', en: 'Seffa with Raisins', ar: 'سفة بالزبيب' }, price: '35,00 MAD', description: { fr: "Seffa aux cheveux d'ange", en: 'Angel hair seffa with raisins', ar: 'سفة الشعرية بالزبيب' }, image: '/Seffa-au-raisins-Secs.jpeg' },
+      { id: 'rfissa-poulet', name: { fr: 'Rfissa au Poulet', en: 'Rfissa with Chicken', ar: 'رفيسة بالدجاج' }, price: '50,00 MAD', description: { fr: 'Rfissa, Madhoussa ou Trid au Poulet', en: 'Rfissa, Madhoussa or Trid with chicken', ar: 'رفيسة أو مضهوصة أو طريد بالدجاج' }, image: '/Rfissa-au-Poulet.jpeg' },
+      { id: 'haricots', name: { fr: 'Haricots', en: 'Beans', ar: 'فاصوليا' }, price: '18,00 MAD', description: { fr: 'Bol Haricots', en: 'Bowl of beans', ar: 'طبق فاصوليا' }, image: '/Haricots.jpeg' },
+      { id: 'lentilles', name: { fr: 'Plat Lentilles', en: 'Lentils', ar: 'عدس' }, price: '18,00 MAD', description: { fr: 'Bol Lentilles', en: 'Bowl of lentils', ar: 'طبق عدس' }, image: '/Lentilles.png' },
     ],
     grille: [
-      { name: 'Chad Trik', price: '125,00 MAD', description: 'Machwi kefta (avant cuisant) 500gr - Salade Marocaine - 2 Cornets frites - 2 Boissons gazeuse 25CL - 2 Mini Pains Beldi', image: '/chad-trique.png' },
-      { name: 'Mchkel', price: '150,00 MAD' , description:'500gr' ,image: '/mchekl.png' },
+      { id: 'chad-trik', name: { fr: 'Chad Trik', en: 'Chad Trik', ar: 'شاد تريك' }, price: '125,00 MAD', description: { fr: 'Machwi kefta (avant cuisant) 500gr - Salade Marocaine - 2 Cornets frites - 2 Boissons gazeuse 25CL - 2 Mini Pains Beldi', en: 'Raw kefta skewers (500g) - Moroccan salad - 2 servings of fries - 2 sparkling drinks 25cl - 2 mini Beldi breads', ar: 'مشوي كفتة (نيء قبل الشوي) 500 غ - سلطة مغربية - علبتا بطاطس مقلية - مشروبان غازيان 25 سل - خبزتان بلديتان صغيرتان' }, image: '/chad-trique.png' },
+      { id: 'mchkel', name: { fr: 'Mchkel', en: 'Mchkel', ar: 'مشكل' }, price: '150,00 MAD', description: { fr: '500gr', en: '500g mixed grill', ar: '500 غ مشكل مشوي' }, image: '/mchekl.png' },
     ],
     sandwiches: [
-      { name: 'Sandwich Kebda + Coca 25cl', price: '89,00 MAD', description: 'Sandwich Kebda + Coca 25cl', image: '/sandwich-kabda.png' },
-      { name: 'Sandwich Lhem Rass + Coca 25cl', price: '69,00 MAD', description: 'Sandwich Lhem Rass + Coca 25cl', image: '/sandwich-kabda.png' },
-      { name: 'Sandwich Kefta & Boisson Gazeuse 25cl', price: '69,00 MAD', description: 'Sandwich Viande hachée (Veau), Tomates, oignons', image: '/sandwich-kefta.png' },
-      { name: 'Sandwich Brochette de Poulet & Boisson Gazeuse 25cl', price: '59,00 MAD', description: 'Sandwich Brochette de poulet & Boisson Gazeuse 25cl', image: '/sandwich-poulet.jpeg' },
-      { name: 'Ration Frites', price: '12,00 MAD', image: '/Frites.png' },
+      { id: 'sandwich-kebda', name: { fr: 'Sandwich Kebda + Coca 25cl', en: 'Liver Sandwich + Coke 25cl', ar: 'ساندويتش كبدة + كوكا 25 سل' }, price: '60,00 MAD', description: { fr: 'Sandwich Kebda + Boisson + Frites', en: 'Liver sandwich + drink + fries', ar: 'ساندويتش كبدة + مشروب + بطاطس مقلية' }, image: '/sandwich-kabda.png' },
+      { id: 'sandwich-lhem-rass', name: { fr: 'Sandwich Lhem Rass + Coca 25cl', en: 'Lhem Rass Sandwich + Coke 25cl', ar: 'ساندويتش لحم الراس + كوكا 25 سل' }, price: '60,00 MAD', description: { fr: 'Sandwich Lhem Rass + Boisson + Frites', en: 'Lhem Rass sandwich + drink + fries', ar: 'ساندويتش لحم الراس + مشروب + بطاطس مقلية' }, image: '/sandwich-kabda.png' },
+      { id: 'sandwich-kefta', name: { fr: 'Sandwich Kefta & Boisson Gazeuse 25cl', en: 'Kefta Sandwich & Sparkling Drink 25cl', ar: 'ساندويتش كفتة ومشروب غازي 25 سل' }, price: '60,00 MAD', description: { fr: 'Sandwich Viande hachée & Boisson + Frites', en: 'Minced meat sandwich & drink + fries', ar: 'ساندويتش لحم مفروم ومشروب + بطاطس مقلية' }, image: '/sandwich-kefta.png' },
+      { id: 'sandwich-brochette-poulet', name: { fr: 'Sandwich Brochette de Poulet & Boisson Gazeuse 25cl', en: 'Chicken Skewer Sandwich & Sparkling Drink 25cl', ar: 'ساندويتش بروشيت دجاج ومشروب غازي 25 سل' }, price: '50,00 MAD', description: { fr: 'Sandwich Brochette de poulet & Boisson + Frites', en: 'Chicken skewer sandwich & drink + fries', ar: 'ساندويتش بروشيت دجاج ومشروب + بطاطس مقلية' }, image: '/sandwich-poulet.jpeg' },
+      { id: 'ration-frites', name: { fr: 'Ration Frites', en: 'Fries', ar: 'بطاطس مقلية' }, price: '12,00 MAD', image: '/Frites.png' },
 
     ],
     drinks: [
-      { name: "Lben A L'ancienne 33cl", price: '8,00 MAD', description: 'Lben beldi', image: '/lben.png', subcategory: 'juice' },
-      { name: 'Jus Panaché 33cl', price: '35,00 MAD', image: '/Jus-Panaché-33cl.jpeg', subcategory: 'juice' },
-      { name: 'Jus de Banane aux Oranges 33cl', price: '30,00 MAD', image: '/Banane-aux-Oranges.jpeg', subcategory: 'juice' },
-      { name: 'Jus de Pomme aux Oranges 33cl', price: '30,00 MAD', image: '/Pomme-aux-Oranges.png', subcategory: 'juice' },
-      { name: "Jus D'orange 33cl", price: '28,00 MAD', image: '/Jus-Dorange-33cl.jpeg', subcategory: 'juice' },
-      { name: 'Jus de Banane au Lait 33cl', price: '28,00 MAD', image: '/Banane-au-Lait.jpeg', subcategory: 'juice' },
-      { name: 'Jus De Pomme au Lait 33cl', price: '28,00 MAD', image: '/Pomme-au-Lait.jpeg', subcategory: 'juice' },
-      { name: 'Boisson Énergétique 25cl', price: '23,00 MAD', description: 'Boisson Énergétique 25cl', image: '/energy-drink.png', subcategory: 'gaseous' },
+      { id: 'jus-panache', name: { fr: 'Jus Panaché 33cl', en: 'Mixed Fruit Juice 33cl', ar: 'عصير مشكل 33 سل' }, price: '25,00 MAD', image: '/Jus-Panaché-33cl.jpeg', subcategory: 'juice' },
+      { id: 'jus-banane-orange', name: { fr: 'Jus de Banane aux Oranges 33cl', en: 'Banana & Orange Juice 33cl', ar: 'عصير الموز بالبرتقال 33 سل' }, price: '20,00 MAD', image: '/Banane-aux-Oranges.jpeg', subcategory: 'juice' },
+      { id: 'jus-pomme-orange', name: { fr: 'Jus de Pomme aux Oranges 33cl', en: 'Apple & Orange Juice 33cl', ar: 'عصير التفاح بالبرتقال 33 سل' }, price: '20,00 MAD', image: '/Pomme-aux-Oranges.png', subcategory: 'juice' },
+      { id: 'jus-orange', name: { fr: "Jus D'orange 33cl", en: 'Orange Juice 33cl', ar: 'عصير البرتقال 33 سل' }, price: '15,00 MAD', image: '/Jus-Dorange-33cl.jpeg', subcategory: 'juice' },
+      { id: 'jus-banane-lait', name: { fr: 'Jus de Banane au Lait 33cl', en: 'Banana Milk Juice 33cl', ar: 'عصير الموز بالحليب 33 سل' }, price: '20,00 MAD', image: '/Banane-au-Lait.jpeg', subcategory: 'juice' },
+      { id: 'jus-pomme-lait', name: { fr: 'Jus De Pomme au Lait 33cl', en: 'Apple Milk Juice 33cl', ar: 'عصير التفاح بالحليب 33 سل' }, price: '20,00 MAD', image: '/Pomme-au-Lait.jpeg', subcategory: 'juice' },
+      { id: 'boisson-energetique', name: { fr: 'Boisson Énergétique 25cl', en: 'Energy Drink 25cl', ar: 'مشروب طاقة 25 سل' }, price: '23,00 MAD', description: { fr: 'Boisson Énergétique 25cl', en: 'Energy drink 25cl', ar: 'مشروب طاقة 25 سل' }, image: '/energy-drink.png', subcategory: 'gaseous' },
       {
-        name: 'Oulmes',
-        description: 'Eau minérale gazeuse',
+        id: 'oulmes',
+        name: { fr: 'Oulmes', en: 'Oulmes', ar: 'أولماس' },
+        description: { fr: 'Eau minérale gazeuse', en: 'Sparkling mineral water', ar: 'ماء معدني غازي' },
         image: '/Oulmes.png',
         subcategory: 'gaseous',
         sizes: [
@@ -136,10 +150,10 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
           { label: '1L', price: '19,00 MAD' },
         ],
       },
-      { name: 'Schweppes Mojito 25cl', price: '15,00 MAD', description: 'Schweppes Mojito Canette 25cl', image: '/mojito.png', subcategory: 'gaseous' },
-      { name: 'Sidi Ali 1,5L', price: '15,00 MAD', image: '/sidi-ali.jpeg', subcategory: 'water' },
-      { name: 'Hawaï Tropical 25cl', price: '13,00 MAD', description: 'Canette 25cl', image: '/hawai.png', subcategory: 'gaseous' },
-      { name: 'Sodas 25cl', price: '12,00 MAD', description: 'Canette 25cl au choix : Coca-Cola, Fanta Orange, Fanta Citron, Sprite, Pepsi ou Pom’s', image: '/Canette.jpeg', subcategory: 'gaseous' },
+      { id: 'schweppes-mojito', name: { fr: 'Schweppes Mojito 25cl', en: 'Schweppes Mojito 25cl', ar: 'شويبس موخيتو 25 سل' }, price: '10,00 MAD', description: { fr: 'Schweppes Mojito Canette 25cl', en: 'Schweppes Mojito can 25cl', ar: 'علبة شويبس موخيتو 25 سل' }, image: '/mojito.png', subcategory: 'gaseous' },
+      { id: 'sidi-ali', name: { fr: 'Sidi Ali 1,5L', en: 'Sidi Ali 1.5L', ar: 'سيدي علي 1.5 لتر' }, price: '15,00 MAD', image: '/sidi-ali.jpeg', subcategory: 'water' },
+      { id: 'hawai-tropical', name: { fr: 'Hawaï Tropical 25cl', en: 'Hawaï Tropical 25cl', ar: 'هاواي تروبيكال 25 سل' }, price: '10,00 MAD', description: { fr: 'Canette 25cl', en: 'Can 25cl', ar: 'علبة 25 سل' }, image: '/hawai.png', subcategory: 'gaseous' },
+      { id: 'sodas', name: { fr: 'Sodas 25cl', en: 'Sodas 25cl', ar: 'مشروبات غازية 25 سل' }, price: '10,00 MAD', description: { fr: 'Canette 25cl au choix : Coca-Cola, Fanta Orange, Fanta Citron, Sprite, Pepsi ou Pom’s', en: "Can 25cl, choice of: Coca-Cola, Fanta Orange, Fanta Lemon, Sprite, Pepsi or Pom's", ar: 'علبة 25 سل، اختر من: كوكاكولا، فانتا برتقال، فانتا ليمون، سبرايت، بيبسي أو بومز' }, image: '/Canette.jpeg', subcategory: 'gaseous' },
     ],
   };
 
@@ -162,8 +176,8 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
       }
       if (query === '') return items;
       return items.filter(item =>
-        item.name.toLowerCase().includes(query) ||
-        item.description?.toLowerCase().includes(query) ||
+        getLocalized(item.name).toLowerCase().includes(query) ||
+        (item.description && getLocalized(item.description).toLowerCase().includes(query)) ||
         (item.price ?? '').toLowerCase().includes(query)
       );
     };
@@ -171,7 +185,7 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
       return Object.fromEntries(allCategories.map(cat => [cat, filterByCategory(cat)]));
     }
     return { [selectedCategory]: filterByCategory(selectedCategory) };
-  }, [searchQuery, selectedCategory, selectedSubcategory]);
+  }, [searchQuery, selectedCategory, selectedSubcategory, language]);
 
   const cartCount = cart.reduce((sum, i) => sum + i.quantity, 0);
   const cartTotal = cart.reduce((sum, i) => sum + getNumericPrice(i.price) * i.quantity, 0);
@@ -191,26 +205,28 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
   const addToCart = () => {
     if (!selectedItem) return;
     const size = selectedItem.sizes?.[selectedSizeIndex];
-    const cartName = size ? `${selectedItem.name} - ${size.label}` : selectedItem.name;
+    const localizedName = getLocalized(selectedItem.name);
+    const cartId = size ? `${selectedItem.id}-${size.label}` : selectedItem.id;
+    const cartName = size ? `${localizedName} - ${size.label}` : localizedName;
     const cartPrice = size ? size.price : selectedItem.price;
     setCart(prev => {
-      const existing = prev.find(i => i.name === cartName);
+      const existing = prev.find(i => i.id === cartId);
       if (existing) {
-        return prev.map(i => i.name === cartName ? { ...i, quantity: i.quantity + itemQty } : i);
+        return prev.map(i => i.id === cartId ? { ...i, quantity: i.quantity + itemQty } : i);
       }
-      return [...prev, { ...selectedItem, name: cartName, price: cartPrice, quantity: itemQty }];
+      return [...prev, { id: cartId, name: cartName, price: cartPrice, image: selectedItem.image, quantity: itemQty }];
     });
     closeItem();
   };
 
-  const removeFromCart = (name: string) => {
-    setCart(prev => prev.filter(i => i.name !== name));
+  const removeFromCart = (id: string) => {
+    setCart(prev => prev.filter(i => i.id !== id));
   };
 
-  const updateCartQty = (name: string, delta: number) => {
+  const updateCartQty = (id: string, delta: number) => {
     setCart(prev =>
       prev
-        .map(i => i.name === name ? { ...i, quantity: i.quantity + delta } : i)
+        .map(i => i.id === id ? { ...i, quantity: i.quantity + delta } : i)
         .filter(i => i.quantity > 0)
     );
   };
@@ -299,11 +315,11 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
               className="group relative rounded-sm overflow-hidden border border-primary/20 hover:border-primary transition-all text-left active:scale-95"
             >
               <div className="relative w-full h-36">
-                <Image src={item.image} alt={item.name} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
+                <Image src={item.image} alt={getLocalized(item.name)} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
               </div>
               <div className="absolute bottom-0 left-0 right-0 p-3">
-                <p className="text-sm font-semibold text-foreground leading-tight">{item.name}</p>
+                <p className="text-sm font-semibold text-foreground leading-tight">{getLocalized(item.name)}</p>
                 <p className="text-primary text-base price-tag">
                   {item.price
                     ?? (item.sizes ? `${translations.fromLabel} ${item.sizes[0].price}` : translations.priceOnRequest)}
@@ -512,7 +528,7 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
               {/* ── Hero image ── */}
               <div className="relative h-72 overflow-hidden">
                 <div className="absolute inset-0 z-0" style={{ background: theme.ambient }} />
-                <Image src={selectedItem.image} alt={selectedItem.name} fill className="object-cover z-[1]"
+                <Image src={selectedItem.image} alt={getLocalized(selectedItem.name)} fill className="object-cover z-[1]"
                   style={{ filter: theme.imgFilter }} />
                 <div className="absolute inset-0 z-[2]" style={{ background: theme.imgGrad }} />
                 <div className="absolute inset-0 z-[2]" style={{ background: 'radial-gradient(ellipse at 50% 50%,transparent 55%,rgba(0,0,0,0.35) 100%)' }} />
@@ -559,13 +575,13 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
                 {/* Name */}
                 <h3 className="font-heading leading-tight tracking-tight"
                   style={{ fontSize: '2rem', color: theme.titleColor }}>
-                  {selectedItem.name}
+                  {getLocalized(selectedItem.name)}
                 </h3>
 
                 {/* Description */}
                 {selectedItem.description && (
                   <p className="text-sm leading-relaxed mt-2 font-serif" style={{ color: theme.descColor }}>
-                    {selectedItem.description}
+                    {getLocalized(selectedItem.description)}
                   </p>
                 )}
 
@@ -689,7 +705,7 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
             {/* Items */}
             <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
               {cart.map(item => (
-                <div key={item.name} className="flex items-center gap-3">
+                <div key={item.id} className="flex items-center gap-3">
                   <div className="relative w-14 h-14 rounded-sm overflow-hidden flex-shrink-0">
                     <Image src={item.image} alt={item.name} fill className="object-cover" />
                   </div>
@@ -701,22 +717,22 @@ export function MenuSection({ translations, visible, onBackClick, isArabic }: Me
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
                     <button
-                      onClick={() => updateCartQty(item.name, -1)}
+                      onClick={() => updateCartQty(item.id, -1)}
                       className="w-8 h-8 border border-primary/60 rounded-sm text-primary flex items-center justify-center hover:bg-primary hover:text-black transition-all text-lg leading-none"
                     >
                       −
                     </button>
                     <span className="w-5 text-center text-sm price-tag" style={{ color: 'var(--foreground)' }}>{item.quantity}</span>
                     <button
-                      onClick={() => updateCartQty(item.name, 1)}
+                      onClick={() => updateCartQty(item.id, 1)}
                       className="w-8 h-8 border border-primary/60 rounded-sm text-primary flex items-center justify-center hover:bg-primary hover:text-black transition-all text-lg leading-none"
                     >
                       +
                     </button>
                     <button
-                      onClick={() => removeFromCart(item.name)}
+                      onClick={() => removeFromCart(item.id)}
                       className="w-8 h-8 flex items-center justify-center text-foreground/30 hover:text-red-500 transition-colors ml-1"
-                      aria-label="Remove item"
+                      aria-label={translations.removeItemLabel}
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

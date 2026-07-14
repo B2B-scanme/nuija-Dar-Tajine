@@ -65,6 +65,8 @@ export interface TranslationType {
   // Size selection
   sizeLabel: string;
   fromLabel: string;
+  // Accessibility
+  removeItemLabel: string;
 }
 
 export const translations: Record<Language, TranslationType> = {
@@ -122,6 +124,7 @@ export const translations: Record<Language, TranslationType> = {
     drinkSubWater: 'Water',
     sizeLabel: 'Size',
     fromLabel: 'From',
+    removeItemLabel: 'Remove item',
   },
   fr: {
     restaurantName: 'Nuija Dar Tajine',
@@ -177,9 +180,10 @@ export const translations: Record<Language, TranslationType> = {
     drinkSubWater: 'Eau',
     sizeLabel: 'Taille',
     fromLabel: 'À partir de',
+    removeItemLabel: 'Retirer l\'article',
   },
   ar: {
-    restaurantName: 'نويجة دار تاجين',
+    restaurantName: 'نويجة دار طاجين',
     subtitle: 'المطبخ المغربي الأصيل بقنيطرة',
     openLabel: 'مفتوح',
     openDays: '7 أيام بالأسبوع',
@@ -212,8 +216,8 @@ export const translations: Record<Language, TranslationType> = {
     priceOnRequest: 'السعر عند الطلب',
     closeBtn: 'إغلاق',
     aboutTitle: 'عن المطعم',
-    aboutSubtitle: 'نويجة دار تاجين',
-    aboutText: 'نويجة دار تاجين مطعم وحلواني مغربي مفتوح منذ 2022، يقع بين وسط مدينة قنيطرة (3 كم) وشاطئ مهدية (4 كم). ندعوكم للتفضل بتذوق المطبخ المغربي الغني بنكهاته، مع تشكيلة من السلطات والطواجن والكسكس والمشويات على الفحم، مع كأس أتاي في إطار أصيل وأجواء مرحبة.',
+    aboutSubtitle: 'نويجة دار طاجين',
+    aboutText: 'نويجة دار طاجين مطعم وحلواني مغربي مفتوح منذ 2022، يقع بين وسط مدينة قنيطرة (3 كم) وشاطئ مهدية (4 كم). ندعوكم للتفضل بتذوق المطبخ المغربي الغني بنكهاته، مع تشكيلة من السلطات والطواجن والكسكس والمشويات على الفحم، مع كأس أتاي في إطار أصيل وأجواء مرحبة.',
     aboutFooter: 'قنيطرة، المغرب',
     tajineSubAll: 'كل الطواجن',
     tajineSubKefta: 'كفتة (لحم مفروم)',
@@ -232,6 +236,7 @@ export const translations: Record<Language, TranslationType> = {
     drinkSubWater: 'ماء',
     sizeLabel: 'الحجم',
     fromLabel: 'ابتداءً من',
+    removeItemLabel: 'إزالة العنصر',
   },
 };
 
