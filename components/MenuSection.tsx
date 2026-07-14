@@ -123,10 +123,10 @@ export function MenuSection({ translations, language, visible, onBackClick, isAr
       { id: 'mchkel', name: { fr: 'Mchkel', en: 'Mchkel', ar: 'مشكل' }, price: '150,00 MAD', description: { fr: '500gr', en: '500g mixed grill', ar: '500 غ مشكل مشوي' }, image: '/mchekl.png' },
     ],
     sandwiches: [
-      { id: 'sandwich-kebda', name: { fr: 'Sandwich Kebda + Coca 25cl', en: 'Liver Sandwich + Coke 25cl', ar: 'ساندويتش كبدة + كوكا 25 سل' }, price: '60,00 MAD', description: { fr: 'Sandwich Kebda + Boisson + Frites', en: 'Liver sandwich + drink + fries', ar: 'ساندويتش كبدة + مشروب + بطاطس مقلية' }, image: '/sandwich-kabda.png' },
-      { id: 'sandwich-lhem-rass', name: { fr: 'Sandwich Lhem Rass + Coca 25cl', en: 'Lhem Rass Sandwich + Coke 25cl', ar: 'ساندويتش لحم الراس + كوكا 25 سل' }, price: '60,00 MAD', description: { fr: 'Sandwich Lhem Rass + Boisson + Frites', en: 'Lhem Rass sandwich + drink + fries', ar: 'ساندويتش لحم الراس + مشروب + بطاطس مقلية' }, image: '/sandwich-kabda.png' },
-      { id: 'sandwich-kefta', name: { fr: 'Sandwich Kefta & Boisson Gazeuse 25cl', en: 'Kefta Sandwich & Sparkling Drink 25cl', ar: 'ساندويتش كفتة ومشروب غازي 25 سل' }, price: '60,00 MAD', description: { fr: 'Sandwich Viande hachée & Boisson + Frites', en: 'Minced meat sandwich & drink + fries', ar: 'ساندويتش لحم مفروم ومشروب + بطاطس مقلية' }, image: '/sandwich-kefta.png' },
-      { id: 'sandwich-brochette-poulet', name: { fr: 'Sandwich Brochette de Poulet & Boisson Gazeuse 25cl', en: 'Chicken Skewer Sandwich & Sparkling Drink 25cl', ar: 'ساندويتش بروشيت دجاج ومشروب غازي 25 سل' }, price: '50,00 MAD', description: { fr: 'Sandwich Brochette de poulet & Boisson + Frites', en: 'Chicken skewer sandwich & drink + fries', ar: 'ساندويتش بروشيت دجاج ومشروب + بطاطس مقلية' }, image: '/sandwich-poulet.jpeg' },
+      { id: 'sandwich-kebda', name: { fr: 'Sandwich Kebda & Boisson & Frites', en: 'Liver Sandwich & Sparkling Drink 25 cl & fries', ar: 'ساندويتش كبدة + مشروب + بطاطس مقلية'  }, price: '60,00 MAD', description: { fr: 'Sandwich Kebda + Boisson + Frites', en: 'Liver sandwich + drink + fries', ar: 'ساندويتش كبدة + مشروب + بطاطس مقلية' }, image: '/sandwich-kabda.png' },
+      { id: 'sandwich-lhem-rass', name: { fr: 'Sandwich Lhem Rass & Boisson & Frites', en: 'Lhem Rass Sandwich + Sparkling Drink 25cl & fries', ar: 'ساندويتش لحم الراس + مشروب + بطاطس مقلية' }, price: '60,00 MAD', description: { fr: 'Sandwich Lhem Rass + Boisson + Frites', en: 'Lhem Rass sandwich + drink + fries', ar: 'ساندويتش لحم الراس + مشروب + بطاطس مقلية' }, image: '/sandwich-kabda.png' },
+      { id: 'sandwich-kefta', name: { fr: 'Sandwich Kefta & Boisson & Frites', en: 'Kefta Sandwich & Sparkling Drink 25cl & fries', ar: 'ساندويتش كفتة + مشروب + بطاطس مقلية' }, price: '60,00 MAD', description: { fr: 'Sandwich Viande hachée & Boisson + Frites', en: 'Minced meat sandwich & drink + fries', ar: 'ساندويتش لحم مفروم ومشروب + بطاطس مقلية' }, image: '/sandwich-kefta.png' },
+      { id: 'sandwich-brochette-poulet', name: { fr: 'Sandwich Brochette de Poulet & Boisson & Frites', en: 'Chicken Skewer Sandwich & Sparkling Drink 25cl & fries', ar: 'ساندويتش بروشيت دجاج + مشروب + بطاطس مقلية' }, price: '50,00 MAD', description: { fr: 'Sandwich Brochette de poulet & Boisson + Frites', en: 'Chicken skewer sandwich & drink + fries', ar: 'ساندويتش بروشيت دجاج ومشروب + بطاطس مقلية' }, image: '/sandwich-poulet.jpeg' },
       { id: 'ration-frites', name: { fr: 'Ration Frites', en: 'Fries', ar: 'بطاطس مقلية' }, price: '12,00 MAD', image: '/Frites.png' },
 
     ],
@@ -138,6 +138,8 @@ export function MenuSection({ translations, language, visible, onBackClick, isAr
       { id: 'jus-banane-lait', name: { fr: 'Jus de Banane au Lait 33cl', en: 'Banana Milk Juice 33cl', ar: 'عصير الموز بالحليب 33 سل' }, price: '20,00 MAD', image: '/Banane-au-Lait.jpeg', subcategory: 'juice' },
       { id: 'jus-pomme-lait', name: { fr: 'Jus De Pomme au Lait 33cl', en: 'Apple Milk Juice 33cl', ar: 'عصير التفاح بالحليب 33 سل' }, price: '20,00 MAD', image: '/Pomme-au-Lait.jpeg', subcategory: 'juice' },
       { id: 'boisson-energetique', name: { fr: 'Boisson Énergétique 25cl', en: 'Energy Drink 25cl', ar: 'مشروب طاقة 25 سل' }, price: '23,00 MAD', description: { fr: 'Boisson Énergétique 25cl', en: 'Energy drink 25cl', ar: 'مشروب طاقة 25 سل' }, image: '/energy-drink.png', subcategory: 'gaseous' },
+      { id: 'hawai-tropical', name: { fr: 'Hawaï Tropical 25cl', en: 'Hawaï Tropical 25cl', ar: 'هاواي تروبيكال 25 سل' }, price: '10,00 MAD', description: { fr: 'Canette 25cl', en: 'Can 25cl', ar: 'علبة 25 سل' }, image: '/hawai.png', subcategory: 'gaseous' },
+      { id: 'sodas', name: { fr: 'Sodas 25cl', en: 'Sodas 25cl', ar: 'مشروبات غازية 25 سل' }, price: '10,00 MAD', description: { fr: 'Canette 25cl au choix : Coca-Cola, Fanta Orange, Fanta Citron, Sprite, Pepsi ou Pom’s', en: "Can 25cl, choice of: Coca-Cola, Fanta Orange, Fanta Lemon, Sprite, Pepsi or Pom's", ar: 'علبة 25 سل، اختر من: كوكاكولا، فانتا برتقال، فانتا ليمون، سبرايت، بيبسي أو بومز' }, image: '/Canette.jpeg', subcategory: 'gaseous' },
       {
         id: 'oulmes',
         name: { fr: 'Oulmes', en: 'Oulmes', ar: 'أولماس' },
@@ -150,10 +152,17 @@ export function MenuSection({ translations, language, visible, onBackClick, isAr
           { label: '1L', price: '19,00 MAD' },
         ],
       },
-      { id: 'schweppes-mojito', name: { fr: 'Schweppes Mojito 25cl', en: 'Schweppes Mojito 25cl', ar: 'شويبس موخيتو 25 سل' }, price: '10,00 MAD', description: { fr: 'Schweppes Mojito Canette 25cl', en: 'Schweppes Mojito can 25cl', ar: 'علبة شويبس موخيتو 25 سل' }, image: '/mojito.png', subcategory: 'gaseous' },
-      { id: 'sidi-ali', name: { fr: 'Sidi Ali 1,5L', en: 'Sidi Ali 1.5L', ar: 'سيدي علي 1.5 لتر' }, price: '15,00 MAD', image: '/sidi-ali.jpeg', subcategory: 'water' },
-      { id: 'hawai-tropical', name: { fr: 'Hawaï Tropical 25cl', en: 'Hawaï Tropical 25cl', ar: 'هاواي تروبيكال 25 سل' }, price: '10,00 MAD', description: { fr: 'Canette 25cl', en: 'Can 25cl', ar: 'علبة 25 سل' }, image: '/hawai.png', subcategory: 'gaseous' },
-      { id: 'sodas', name: { fr: 'Sodas 25cl', en: 'Sodas 25cl', ar: 'مشروبات غازية 25 سل' }, price: '10,00 MAD', description: { fr: 'Canette 25cl au choix : Coca-Cola, Fanta Orange, Fanta Citron, Sprite, Pepsi ou Pom’s', en: "Can 25cl, choice of: Coca-Cola, Fanta Orange, Fanta Lemon, Sprite, Pepsi or Pom's", ar: 'علبة 25 سل، اختر من: كوكاكولا، فانتا برتقال، فانتا ليمون، سبرايت، بيبسي أو بومز' }, image: '/Canette.jpeg', subcategory: 'gaseous' },
+      {
+        id: 'sidi-ali',
+        name: { fr: 'Sidi Ali', en: 'Sidi Ali', ar: 'سيدي علي' },
+        image: '/sidi-ali.jpeg',
+        subcategory: 'water',
+        sizes: [
+          { label: '33cl', price: '5,00 MAD' },
+          { label: '50cl', price: '8,00 MAD' },
+          { label: '1,5L', price: '15,00 MAD' },
+        ],
+      },
     ],
   };
 
